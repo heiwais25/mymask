@@ -28,9 +28,6 @@ export default () => {
           </Wrapper>
         </BrowserRouter>
         <ToastContainer position={toast.POSITION.BOTTOM_LEFT} />
-        <Helmet>
-          <title>My Mask</title>
-        </Helmet>
         {/* <LandingDialog open={open} handleClose={() => setOpen(false)} /> */}
       </ThemeProvider>
     </MaterialThemeProvider>
