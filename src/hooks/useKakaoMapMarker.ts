@@ -1,13 +1,8 @@
 import { useCallback, useState, useEffect } from "react";
 import { IStore, IRemainStat } from "./useFetchStores";
-import {
-  IMarker,
-  IInfoWindow,
-  ICustomOverlay
-} from "../Components/KakaoMap/types";
+import { IMarker, ICustomOverlay } from "../Components/KakaoMap/types";
 import { IMap, IMarkerClusterer } from "../Components/KakaoMap/types";
 import _ from "lodash";
-import { isMobile } from "react-device-detect";
 import "moment/locale/ko";
 import moment from "moment";
 
@@ -22,13 +17,6 @@ const markerIcon: { [key in IRemainStat]: string } = {
   some: "/images/marker-yellow.png",
   few: "/images/marker-red.png",
   empty: "/images/marker-grey.png"
-};
-
-const colorClassString: { [key in IRemainStat]: string } = {
-  plenty: "충분",
-  some: "보통",
-  few: "부족",
-  empty: "없음"
 };
 
 const statusString: { [key in IRemainStat]: string } = {
@@ -116,9 +104,11 @@ export default ({
             image: icon
           });
 
-          const iwContent = `<div class="custom_window"> <div class="_window_col"> <div class="_window_title"> ${
+          const iwContent = `<div class="custom_window"> <div class="_window_col"><div style="display:flex; align-items:center"> <div class="_window_title"> ${
             store.name
-          } </div><div style="white-space:normal; line-height: 1.3;"> ${
+          } </div><span class="distance">${
+            store.distance
+          } m</span></div><div style="white-space:normal; line-height: 1.3;"> ${
             store.addr
           } </div><div> 입고시간 : ${moment(
             store.stock_at
@@ -182,6 +172,7 @@ export default ({
       }
       return { markers: newMarkers, overlays: newInfos };
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [map, clusterer]
   );
 

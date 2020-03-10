@@ -8,8 +8,8 @@ import { FixedSizeList, ListChildComponentProps } from "react-window";
 import DialogContent from "./MuiDialogContent";
 import AutoSize from "react-virtualized-auto-sizer";
 import { useLocation, useHistory } from "react-router-dom";
-import { IStore } from "../hooks/useFetchStores";
-import { STORE_LIST_DIALOG } from "../constants";
+import { IStore, IRemainStat } from "../hooks/useFetchStores";
+import { STORE_LIST_DIALOG, statusString } from "../constants";
 
 const ListItemContainer = styled.div`
   padding: 8px 0px;
@@ -22,6 +22,10 @@ const Cols = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  word-break: keep-all;
+  :not(:last-child) {
+    padding-right: 16px;
+  }
 `;
 
 const Row = styled.div`
@@ -40,6 +44,24 @@ const Title = styled.span`
   font-weight: 600;
   font-size: 16px;
   padding-right: 8px;
+`;
+
+type StatusProps = {
+  "data-stat": IRemainStat;
+};
+
+const Status = styled.span<StatusProps>`
+  font-size: 18px;
+  text-align: center;
+  font-weight: 600;
+  color: ${props =>
+    props["data-stat"] === "plenty"
+      ? props.theme.greenColor
+      : props["data-stat"] === "some"
+      ? props.theme.yellowColor
+      : props["data-stat"] === "few"
+      ? props.theme.redColor
+      : props.theme.greyColor};
 `;
 
 const Text = styled.span``;
@@ -67,6 +89,7 @@ export default ({ stores, handleItemClick }: Props) => {
     } else {
       setOpen(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.hash, stores]);
 
   const handleClose = () => {
@@ -93,6 +116,13 @@ export default ({ stores, handleItemClick }: Props) => {
             </Row>
             <Row>
               <Text>{store.addr}</Text>
+            </Row>
+          </Cols>
+          <Cols>
+            <Row>
+              <Status data-stat={store.remain_stat}>
+                {statusString[store.remain_stat]}
+              </Status>
             </Row>
           </Cols>
         </ListItemContainer>

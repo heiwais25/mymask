@@ -14,6 +14,7 @@ import { useHistory, useLocation } from "react-router-dom";
 import { useCallback } from "react";
 import useGeoLocation from "../../hooks/useGeoLocation";
 import { isLatLngEqaul } from "../utils/maps";
+import { isMobile } from "react-device-detect";
 
 declare global {
   interface Window {
@@ -40,6 +41,11 @@ const Container = styled.div`
     padding: 12px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
     font-size: 12px;
+  }
+
+  .custom_window .distance {
+    color: ${props => props.theme.darkGreyColor};
+    padding-left: 4px;
   }
 
   .custom_window .plenty {
@@ -130,7 +136,6 @@ export default () => {
   });
 
   const [selectedStore, setSelectedStore] = useState<IStore>();
-  const [visibleStores, setVisibleStores] = useState<IStore[]>([]);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [currentLocation, setCurrentLocation] = useState<ILatLng>();
   const [isCurrentLocation, setIsCurrentLocation] = useState(false);
@@ -141,7 +146,7 @@ export default () => {
 
   const map = useKakaoMap(ref, {
     center: new window.kakao.maps.LatLng(33.45, 126.57),
-    level: 4,
+    level: isMobile ? 4 : 3,
     disableDoubleClick: true
   });
 
@@ -159,7 +164,7 @@ export default () => {
 
   const { addMarker, setMarkersHidden, setMarkersVisible } = useKakaoMapMarker({
     map,
-    clusterMinLevel: 5,
+    clusterMinLevel: isMobile ? 5 : 4,
     onClick: selectStoreInMap
   });
   const { stores, loading } = useFetchStores(positions);
@@ -183,7 +188,6 @@ export default () => {
     let newStores: IStore[] = [];
     if (stores) {
       newStores = _.uniqBy(stores, "code");
-      setVisibleStores(newStores);
       const { markers, overlays } = addMarker(
         currentMarkers,
         newStores,
@@ -209,7 +213,7 @@ export default () => {
     if (map) {
       const latlng = new window.kakao.maps.LatLng(store.lat, store.lng);
       map.setCenter(latlng);
-      map.setLevel(2);
+      map.setLevel(3);
       overlays.forEach(overlay => {
         if (isLatLngEqaul(overlay.getPosition(), latlng)) {
           overlay.setMap(map);
@@ -223,7 +227,7 @@ export default () => {
   const moveToLatLng = (latLng: ILatLng) => {
     if (map) {
       map.setCenter(latLng);
-      map.setLevel(4);
+      map.setLevel(isMobile ? 4 : 3);
     }
   };
 
@@ -277,7 +281,10 @@ export default () => {
         detailDialogOpen={detailDialogOpen}
         selectedStore={selectedStore}
         loading={loading}
-        hasItem={visibleStores.length > 0}
+        hasItem={
+          stores.filter(store => filterButtonState[store.remain_stat]).length >
+          0
+        }
         moveToCurrentLocation={moveToCurrentLocation}
         isCurrentLocation={isCurrentLocation}
       />

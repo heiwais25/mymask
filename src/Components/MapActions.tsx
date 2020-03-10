@@ -95,6 +95,24 @@ const GreyIcon = styled(MarkerIcon)`
   background-size: cover;
 `;
 
+const BottomSign = styled.div`
+  position: absolute;
+  bottom: ${props => props.theme.mapActionPadding};
+  right: ${props => props.theme.mapActionPadding};
+  z-index: 10;
+  font-size: 11px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+`;
+
+const MeInfo = styled.span`
+  text-shadow: 0.5px 0.5px 0.5px gray;
+  :not(:last-child) {
+    padding-bottom: 2px;
+  }
+`;
+
 type FilterButtonProps = {
   "data-focused"?: boolean;
 };
@@ -163,21 +181,21 @@ export default ({
           data-focused={filterButtonState.plenty}
         >
           <GreenIcon />
-          <FilterText>많음</FilterText>
+          <FilterText>충분</FilterText>
         </FilterButton>
         <FilterButton
           onClick={loading ? () => null : () => toggleFilter("some")}
           data-focused={filterButtonState.some}
         >
           <YellowIcon />
-          <FilterText>중간</FilterText>
+          <FilterText>보통</FilterText>
         </FilterButton>
         <FilterButton
           onClick={loading ? () => null : () => toggleFilter("few")}
           data-focused={filterButtonState.few}
         >
           <RedIcon />
-          <FilterText>적음</FilterText>
+          <FilterText>부족</FilterText>
         </FilterButton>
         <FilterButton
           onClick={loading ? () => null : () => toggleFilter("empty")}
@@ -198,6 +216,10 @@ export default ({
           <Filter size={20} />
         </IconButton> */}
       </RightSideButtons>
+      <BottomSign>
+        <MeInfo>김종현</MeInfo>
+        <MeInfo>jongkoo25@gmail.com</MeInfo>
+      </BottomSign>
       {!loading && hasItem && (
         <BottomSideButtons>
           <ListViewButton onClick={openListDialog}>

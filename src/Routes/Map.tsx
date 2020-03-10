@@ -5,7 +5,7 @@ import KakaoMap from "../Components/KakaoMap/KakaoMap";
 const Container = styled.div`
   position: relative;
   width: 100%;
-  height: calc(100vh - 88px);
+  height: calc(100vh - 44px);
   svg {
     fill: ${props => props.theme.darkGreyColor};
   }

@@ -3,7 +3,6 @@ import { Switch, Redirect, Route } from "react-router-dom";
 import Map from "../Routes/Map";
 import styled from "../Styles";
 import Header from "./Header";
-import Search from "./Search";
 
 const Container = styled.div`
   display: flex;
@@ -20,7 +19,7 @@ export default () => (
   <Container>
     <HeaderBox>
       <Header />
-      <Search />
+      {/* <Search /> */}
     </HeaderBox>
     <PageBox>
       <Switch>
