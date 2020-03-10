@@ -5,16 +5,30 @@
         <link href="%PUBLIC_URL%/favicon.ico" rel="icon"/>
         <meta content="width=device-width, initial-scale=1" name="viewport"/>
         <meta content="#000000" name="theme-color"/>
-        <meta content="Web site created using create-react-app" name="description"/>
-        <link href="/apple-touch-icon.png" rel="apple-touch-icon" sizes="180x180">
-        <link href="/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png">
-        <link href="/favicon-16x16.png" rel="icon" sizes="16x16" type="image/png">
-        <link href="/site.webmanifest" rel="manifest">
+
+        <!-- Primary Meta Tags -->
+        <title>My Mask - 내 집 주변의 마스크 찾기</title>
+        <meta content="My Mask - 내 집 주변의 마스크 찾기" name="title">
+        <meta content="지도를 통해 집 주변 어디에서 마스크를 파는지 한 눈에 파악하세요." name="description">
+
+        <!-- Open Graph / Facebook -->
+        <meta content="website" property="og:type">
+        <meta content="https://mymask.info/" property="og:url">
+        <meta content="My Mask - 내 집 주변의 마스크 찾기" property="og:title">
+        <meta content="지도를 통해 집 주변 어디에서 마스크를 파는지 한 눈에 파악하세요." property="og:description">
+        <meta content="https://mymask.info/android-chrome-512x512.png" property="og:image">
+
+        <!-- Twitter -->
+        <meta content="summary_large_image" property="twitter:card">
+        <meta content="https://mymask.info/" property="twitter:url">
+        <meta content="My Mask - 내 집 주변의 마스크 찾기" property="twitter:title">
+        <meta content="지도를 통해 집 주변 어디에서 마스크를 파는지 한 눈에 파악하세요." property="twitter:description">
+        <meta content="https://mymask.info/android-chrome-512x512.png" property="twitter:image">
         <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-                        <!--
+                                                                <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
       Only files inside the `public` folder can be referenced from the HTML.
@@ -25,7 +39,6 @@
     -->
         <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=64f29615930407c8aa1954698dec0b0d&libraries=clusterer" type="text/javascript" type="text/javascript"></script>
 
-        <title>My Mask</title>
     </head>
     <body>
         <noscript>You need to enable JavaScript to run this app.</noscript>
