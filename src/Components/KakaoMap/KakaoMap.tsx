@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import { STORE_LIST_DIALOG, STORE_DETAIL_DIALOG } from "../../constants";
-import { IKakaoMap, ILatLng, IMarker } from "./types";
+import { IKakaoMap, ILatLng, IMarker, ICustomOverlay } from "./types";
 import styled from "../../Styles/index";
 import MapActions from "../MapActions";
 import useKakaoMap from "../../hooks/useKakaoMap";
@@ -25,85 +25,83 @@ declare global {
 
 const Container = styled.div`
   height: 100%;
-
-  .store_marker {
-    position: relative;
-    display: block;
-    background-color: ${props => props.theme.markerGreyColor};
-    color: white;
-    text-align: center;
-    white-space: nowrap;
-    min-width: 60px;
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.16), 0 2px 2px rgba(0, 0, 0, 0.23);
-    padding: 8px;
-    border-radius: 4px;
-    z-index: 1;
-    .store_meta {
-      display: none;
-    }
+  div {
+    border: 0 !important;
   }
-
-  .store_marker:hover {
+  .custom_window {
+    cursor: default;
+    word-break: keep-all;
+    line-height: 1.1;
+    width: 260px;
+    padding: 5px;
+    display: flex;
+    background-color: white;
+    border-radius: 8px;
     padding: 12px;
-    z-index: 9999;
-
-    .store_name {
-      font-size: 14px;
-    }
-
-    .store_meta {
-      padding-top: 8px;
-      display: block;
-    }
-
-    :after {
-      display: none;
-    }
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    font-size: 12px;
   }
 
-  .store_marker:after {
+  .custom_window .plenty {
+    color: ${props => props.theme.greenColor};
+  }
+
+  .custom_window .some {
+    color: ${props => props.theme.yellowColor};
+  }
+
+  .custom_window .few {
+    color: ${props => props.theme.redColor};
+  }
+
+  .custom_window .empty {
+    color: ${props => props.theme.greyColor};
+  }
+
+  .custom_window:after {
     content: "";
-    width: 0px;
-    height: 0px;
-    border-left: 7px solid transparent;
-    border-right: 7px solid transparent;
-    border-top: 14px solid ${props => props.theme.markerGreyColor};
     position: absolute;
-    margin-left: -7px;
+    margin-left: -12px;
     left: 50%;
-    bottom: -14px;
+    bottom: -10px;
+    width: 22px;
+    height: 12px;
+    background: url("/images/vertex_white.png");
   }
 
-  .stock_plenty {
-    background-color: ${props => props.theme.markerGreenColor};
+  .custom_window span {
+    white-space: nowrap;
   }
 
-  .stock_plenty:after {
-    background-color: ${props => props.theme.markerGreenColor};
+  .custom_window ._window_col {
+    display: flex;
+    flex-direction: column;
+    padding-right: 12px;
   }
 
-  .stock_some {
-    background-color: ${props => props.theme.markerYelloColor};
+  .custom_window ._window_col:nth-child(2) {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
   }
 
-  .stock_some:after {
-    background-color: ${props => props.theme.markerYelloColor};
+  .custom_window ._window_col div {
+    white-space: nowrap;
+    padding-bottom: 4px;
   }
 
-  .stock_empty {
-    background-color: ${props => props.theme.markerRedColor};
+  .custom_window ._stock span {
+    white-space: nowrap;
+    :not(:last-child) {
+      padding-bottom: 4px;
+    }
+    text-align: center;
   }
 
-  .stock_empty:after {
-    background-color: ${props => props.theme.markerRedColor};
-  }
-
-  .stock_empty {
-    background-color: ${props => props.theme.markerGreyColor};
-  }
-
-  .stock_empty:after {
-    background-color: ${props => props.theme.markerGreyColor};
+  .custom_window ._window_title {
+    font-size: 14px;
+    font-weight: 600;
+    padding-bottom: 6px;
   }
 `;
 
@@ -121,13 +119,14 @@ export default () => {
     few: [],
     empty: []
   });
+  const [overlays, setOverlays] = useState<ICustomOverlay[]>([]);
   const [filterButtonState, setFilterButtonState] = useState<
     { [key in IRemainStat]: boolean }
   >({
     plenty: true,
     some: true,
     few: true,
-    empty: true
+    empty: false
   });
 
   const [selectedStore, setSelectedStore] = useState<IStore>();
@@ -142,7 +141,8 @@ export default () => {
 
   const map = useKakaoMap(ref, {
     center: new window.kakao.maps.LatLng(33.45, 126.57),
-    level: 3
+    level: 4,
+    disableDoubleClick: true
   });
 
   const positions = useKakaoMapBounds({ map, debounce: 500 });
@@ -159,7 +159,7 @@ export default () => {
 
   const { addMarker, setMarkersHidden, setMarkersVisible } = useKakaoMapMarker({
     map,
-    clusterMinLevel: 4,
+    clusterMinLevel: 5,
     onClick: selectStoreInMap
   });
   const { stores, loading } = useFetchStores(positions);
@@ -184,8 +184,13 @@ export default () => {
     if (stores) {
       newStores = _.uniqBy(stores, "code");
       setVisibleStores(newStores);
-      const newMarker = addMarker(currentMarkers, newStores, filterButtonState);
-      setCurrentMarkers(newMarker);
+      const { markers, overlays } = addMarker(
+        currentMarkers,
+        newStores,
+        filterButtonState
+      );
+      setCurrentMarkers(markers);
+      setOverlays(overlays);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stores, addMarker]);
@@ -202,15 +207,23 @@ export default () => {
   const moveToStore = (store: IStore) => {
     history.goBack();
     if (map) {
-      map.setCenter(new window.kakao.maps.LatLng(store.lat, store.lng));
+      const latlng = new window.kakao.maps.LatLng(store.lat, store.lng);
+      map.setCenter(latlng);
       map.setLevel(2);
+      overlays.forEach(overlay => {
+        if (isLatLngEqaul(overlay.getPosition(), latlng)) {
+          overlay.setMap(map);
+        } else {
+          overlay.setMap(null);
+        }
+      });
     }
   };
 
   const moveToLatLng = (latLng: ILatLng) => {
     if (map) {
       map.setCenter(latLng);
-      map.setLevel(3);
+      map.setLevel(4);
     }
   };
 
@@ -228,12 +241,14 @@ export default () => {
         hash: STORE_LIST_DIALOG
       });
     }
+    overlays.forEach(overlay => overlay.setMap(null));
   };
 
   const moveToCurrentLocation = () => {
     if (currentLocation) {
       moveToLatLng(currentLocation);
     }
+    overlays.forEach(overlay => overlay.setMap(null));
   };
 
   const toggleFilter = (key: IRemainStat) => {
@@ -249,6 +264,7 @@ export default () => {
       ...filterButtonState,
       [key]: !current
     });
+    overlays.forEach(overlay => overlay.setMap(null));
   };
 
   return (
@@ -265,7 +281,10 @@ export default () => {
         moveToCurrentLocation={moveToCurrentLocation}
         isCurrentLocation={isCurrentLocation}
       />
-      <StoreListDialog stores={stores} handleItemClick={moveToStore} />
+      <StoreListDialog
+        stores={stores.filter(store => filterButtonState[store.remain_stat])}
+        handleItemClick={moveToStore}
+      />
     </Container>
   );
 };

@@ -88,6 +88,11 @@ export type IKakaoMap = {
       eventType: IEventType,
       callback: () => void
     ) => void;
+    removeListener: (
+      map: IMap | ICustomOverlay | IMarker,
+      eventType: IEventType,
+      callback: () => void
+    ) => void;
   };
 };
 
@@ -113,6 +118,8 @@ export type IPoint = {
 export type IMapOption = {
   center: ILatLng;
   level: number;
+  disableDoubleClick?: boolean;
+  disableDoubleClickZoom?: boolean;
 };
 
 export type ILatLngBounds = {
@@ -160,6 +167,7 @@ export type IMarker = {
   getDraggable: () => boolean;
   setClickable: (clickable: boolean) => void;
   getClickable: () => boolean;
+  setImage: (image: IMarkerImage) => void;
 };
 
 export type IMarkerImage = {};

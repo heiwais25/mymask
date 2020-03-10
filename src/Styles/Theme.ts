@@ -16,6 +16,11 @@ const theme = {
   markerGreyColor: "#7f8c8d",
   markerBaseColor: "#ffffff",
 
+  redColor: "#E73C3C",
+  yellowColor: "#F1C40E",
+  greenColor: "#26AE60",
+  greyColor: "#96A5A6",
+
   mapActionPadding: "10px",
   basePadding: "10px",
   darkGreyColor: "#666666",
@@ -30,7 +35,6 @@ const theme = {
     box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     `,
   blueColor: "#3498db",
-  greenColor: "#27ae60",
 
   unselectableText: `
   -webkit-user-select: none;
@@ -45,11 +49,11 @@ const theme = {
   maxWidth: "935px",
   bgColor: "#FAFAFA",
   blackColor: "#333333",
-  greyColor: "#767676",
+
   borderGreyColor: "#cacaca",
 
   lightGreyColor: "#FDFDFC",
-  redColor: "#E4685D",
+
   redFocusedColor: "#d8665c",
   blueFocuesdColor: "#127965",
   darkBlueColor: "#3D85C0",

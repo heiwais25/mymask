@@ -56,11 +56,14 @@ export default ({ stores, handleItemClick }: Props) => {
   const location = useLocation();
   const history = useHistory();
   const [visibleStores, setVisibleStores] = useState<IStore[]>([]);
-
   useEffect(() => {
-    if (location.hash === STORE_LIST_DIALOG && stores.length > 0) {
-      setOpen(true);
-      setVisibleStores(stores);
+    if (location.hash === STORE_LIST_DIALOG) {
+      if (stores.length > 0) {
+        setOpen(true);
+        setVisibleStores(stores.sort((a, b) => a.distance - b.distance));
+      } else {
+        history.goBack();
+      }
     } else {
       setOpen(false);
     }
