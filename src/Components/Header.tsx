@@ -37,7 +37,7 @@ const SubBold = styled.span`
   font-weight: 600;
 `;
 
-const maskRotation = ["1, 6", "2, 7", "3, 8", "4, 9", "5, 0", "전체", "전체"];
+const maskRotation = ["전체", "1, 6", "2, 7", "3, 8", "4, 9", "5, 0", "전체"];
 
 export default () => {
   return (
