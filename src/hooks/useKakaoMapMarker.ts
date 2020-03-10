@@ -1,13 +1,20 @@
 import { useCallback, useState, useEffect } from "react";
-import { IStore } from "./useFetchStores";
-import { ICustomOverlay, IMarker } from "../Components/KakaoMap/types";
+import { IStore, IRemainStat } from "./useFetchStores";
+import { IMarker } from "../Components/KakaoMap/types";
 import { IMap, IMarkerClusterer } from "../Components/KakaoMap/types";
-import moment, { Moment } from "moment";
+import _ from "lodash";
 
 type Params = {
   map: IMap | undefined;
   clusterMinLevel?: number;
   onClick?: (store: IStore) => void;
+};
+
+const markerIcon: { [key in IRemainStat]: string } = {
+  plenty: "/images/marker-green.png",
+  some: "/images/marker-yellow.png",
+  few: "/images/marker-red.png",
+  empty: "/images/marker-grey.png"
 };
 
 export default ({
@@ -22,27 +29,41 @@ export default ({
         new window.kakao.maps.MarkerClusterer({
           map,
           averageCenter: true,
-          minLevel: clusterMinLevel
+          minLevel: clusterMinLevel,
+          gridSize: 80,
+          calculator: [0],
+          minClusterSize: 1
         })
       );
     }
   }, [map, clusterMinLevel]);
 
   const addMarker = useCallback(
-    (oldMarkers: IMarker[], newStores: IStore[]) => {
-      // Clear old Markers
-      clusterer?.removeMarkers(oldMarkers);
-      oldMarkers.forEach(marker => marker.setMap(null));
+    (
+      oldMarkers: { [key in IRemainStat]: IMarker[] },
+      newStores: IStore[],
+      filterState?: { [key in IRemainStat]: boolean }
+    ) => {
+      const newMarkers: { [key in IRemainStat]: IMarker[] } = {
+        plenty: [],
+        some: [],
+        few: [],
+        empty: []
+      };
 
-      let newMarkers: IMarker[] = [];
+      const flattenMarkers = _.flatten(Object.values(oldMarkers));
+      // Clear old Markers
+      clusterer?.removeMarkers(flattenMarkers);
+      flattenMarkers.forEach(marker => marker.setMap(null));
+
       if (map) {
-        newMarkers = newStores.map(store => {
+        newStores.forEach(store => {
           const icon = new window.kakao.maps.MarkerImage(
-            "/images/marker-red.png",
+            markerIcon[store.remain_stat],
             new window.kakao.maps.Size(35, 50),
             {
               offset: new window.kakao.maps.Point(16, 34),
-              alt: "마커 이미지 예제",
+              alt: "markerOfStore",
               shape: "poly",
               coords: "1,20,1,9,5,2,10,0,21,0,27,3,30,9,30,20,17,33,14,33"
             }
@@ -54,15 +75,42 @@ export default ({
           });
 
           marker.setMap(map);
+
+          newMarkers[store.remain_stat].push(marker);
+
           return marker;
           // Save markers
         });
-        clusterer?.addMarkers(newMarkers);
+        clusterer?.addMarkers(_.flatten(Object.values(newMarkers)));
+
+        if (filterState) {
+          Object.keys(filterState).forEach(key => {
+            if (!filterState[key as IRemainStat]) {
+              clusterer?.removeMarkers(newMarkers[key as IRemainStat]);
+            }
+          });
+        }
       }
       return newMarkers;
     },
     [map, clusterer]
   );
 
-  return { addMarker };
+  const setMarkersVisible = useCallback(
+    (markers: IMarker[]) => {
+      clusterer?.addMarkers(markers);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [map, clusterer]
+  );
+
+  const setMarkersHidden = useCallback(
+    (markers: IMarker[]) => {
+      clusterer?.removeMarkers(markers);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [map, clusterer]
+  );
+
+  return { addMarker, setMarkersVisible, setMarkersHidden };
 };

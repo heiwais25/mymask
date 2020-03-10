@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "../Styles/index";
-import { Filter, Location, UpArrow } from "../Icons";
-import { IStore } from "../hooks/useFetchStores";
+import { Location, UpArrow } from "../Icons";
+import { IStore, IRemainStat } from "../hooks/useFetchStores";
 import Loader from "./Loader";
 
 const RightSideButtons = styled.div`
@@ -60,6 +60,76 @@ const LoaderBox = styled.div`
   z-index: 1000;
 `;
 
+const TopFilterButtonsBox = styled.div`
+  display: flex;
+  position: absolute;
+  top: ${props => props.theme.mapActionPadding};
+  left: ${props => props.theme.mapActionPadding};
+  z-index: 10;
+`;
+
+const MarkerIcon = styled.div`
+  background: url("/images/marker-red.png") no-repeat;
+  background-size: cover;
+  width: 14px;
+  height: 20px;
+`;
+
+const GreenIcon = styled(MarkerIcon)`
+  background: url("/images/marker-green.png") no-repeat;
+  background-size: cover;
+`;
+
+const RedIcon = styled(MarkerIcon)`
+  background: url("/images/marker-red.png") no-repeat;
+  background-size: cover;
+`;
+
+const YellowIcon = styled(MarkerIcon)`
+  background: url("/images/marker-yellow.png") no-repeat;
+  background-size: cover;
+`;
+
+const GreyIcon = styled(MarkerIcon)`
+  background: url("/images/marker-grey.png") no-repeat;
+  background-size: cover;
+`;
+
+type FilterButtonProps = {
+  "data-focused"?: boolean;
+};
+
+const FilterButton = styled.div<FilterButtonProps>`
+  ${props => props.theme.unselectableText}
+  cursor: pointer;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  padding: 4px 4px;
+  color: ${props => (props["data-focused"] ? "white" : "black")};
+  background: linear-gradient(
+    90deg,
+    white,
+    white 35%,
+    ${props => (props["data-focused"] ? props.theme.blueColor : "white")} 35%
+  );
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  :not(:last-child) {
+    margin-right: ${props => props.theme.mapActionPadding};
+  }
+
+  /* width: 60px; */
+  /* height: 40px; */
+`;
+
+const FilterText = styled.span`
+  text-align: center;
+  font-size: 14px;
+  white-space: nowrap;
+  padding-left: 8px;
+  padding-right: 4px;
+`;
+
 const DetailInfoBox = styled.div``;
 
 type Props = {
@@ -70,6 +140,8 @@ type Props = {
   openListDialog: () => void;
   moveToCurrentLocation: () => void;
   isCurrentLocation?: boolean;
+  filterButtonState: { [key in IRemainStat]: boolean };
+  toggleFilter: (key: IRemainStat) => void;
 };
 
 export default ({
@@ -79,10 +151,42 @@ export default ({
   loading,
   hasItem,
   moveToCurrentLocation,
+  filterButtonState,
+  toggleFilter,
   isCurrentLocation = false
 }: Props) => {
   return (
     <>
+      <TopFilterButtonsBox>
+        <FilterButton
+          onClick={loading ? () => null : () => toggleFilter("plenty")}
+          data-focused={filterButtonState.plenty}
+        >
+          <GreenIcon />
+          <FilterText>많음</FilterText>
+        </FilterButton>
+        <FilterButton
+          onClick={loading ? () => null : () => toggleFilter("some")}
+          data-focused={filterButtonState.some}
+        >
+          <YellowIcon />
+          <FilterText>중간</FilterText>
+        </FilterButton>
+        <FilterButton
+          onClick={loading ? () => null : () => toggleFilter("few")}
+          data-focused={filterButtonState.few}
+        >
+          <RedIcon />
+          <FilterText>적음</FilterText>
+        </FilterButton>
+        <FilterButton
+          onClick={loading ? () => null : () => toggleFilter("empty")}
+          data-focused={filterButtonState.empty}
+        >
+          <GreyIcon />
+          <FilterText>없음</FilterText>
+        </FilterButton>
+      </TopFilterButtonsBox>
       <RightSideButtons>
         <IconButton
           onClick={moveToCurrentLocation}
@@ -90,9 +194,9 @@ export default ({
         >
           <Location size={24} />
         </IconButton>
-        <IconButton>
+        {/* <IconButton>
           <Filter size={20} />
-        </IconButton>
+        </IconButton> */}
       </RightSideButtons>
       {!loading && hasItem && (
         <BottomSideButtons>

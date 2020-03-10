@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "../Styles";
-import { Helmet } from "react-helmet";
 import { ThemeProvider } from "styled-components";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";

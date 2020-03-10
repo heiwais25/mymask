@@ -32,6 +32,14 @@ const theme = {
   blueColor: "#3498db",
   greenColor: "#27ae60",
 
+  unselectableText: `
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  `,
+
   boardWidth: `${BOARD_WIDTH}`,
   boardLargeWidth: `${BOARD_MAX_WIDTH}`,
   maxWidth: "935px",

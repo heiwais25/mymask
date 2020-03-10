@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Dialog from "@material-ui/core/Dialog";
 import ListItem from "@material-ui/core/ListItem";
-import List from "@material-ui/core/List";
 import { isMobile } from "react-device-detect";
 import styled from "../Styles/index";
 import MuiDialogTitle from "../Components/MuiDialogTitle";
@@ -44,12 +43,6 @@ const Title = styled.span`
 `;
 
 const Text = styled.span``;
-
-const CountText = styled.span`
-  font-size: 20px;
-  min-width: 60px;
-  text-align: center;
-`;
 
 const Meta = styled.span``;
 
@@ -98,9 +91,6 @@ export default ({ stores, handleItemClick }: Props) => {
             <Row>
               <Text>{store.addr}</Text>
             </Row>
-          </Cols>
-          <Cols>
-            <CountText>{`${store.stock_cnt} 개`}</CountText>
           </Cols>
         </ListItemContainer>
       </ListItem>

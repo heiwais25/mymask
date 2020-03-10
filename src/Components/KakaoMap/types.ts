@@ -1,3 +1,5 @@
+import { CSSProperties } from "react";
+
 export type IEventType =
   | "center_changed"
   | "zoom_start"
@@ -73,9 +75,11 @@ export type IKakaoMap = {
       map?: IMap;
       markers?: IMarker[];
       gridSize?: number;
+      calculator?: number[];
       disableClickZoom?: boolean;
-      styles?: CSSStyleSheet[];
+      styles?: CSSProperties[];
       calculater?: number[];
+      minClusterSize?: number;
     }): IMarkerClusterer;
   };
   event: {

@@ -5,20 +5,21 @@ import axios from "axios";
 import moment from "moment";
 import { ILatLng } from "../Components/KakaoMap/types";
 import { TIME_INTERVAL, FETCH_DISTANCE } from "../constants";
+import { getDistance } from "geolib";
+
+export type IRemainStat = "few" | "empty" | "some" | "plenty";
 
 export type IStore = {
+  addr: string;
+  name: string;
   code: number;
   created_at: string;
-  name: string;
-  type: string;
-  addr: string;
-  distance: number;
-  sold_cnt: number;
-  sold_out: boolean;
-  stock_cnt: number;
-  stock_t: string;
   lat: number;
   lng: number;
+  stock_at: string;
+  type: string;
+  distance: number;
+  remain_stat: IRemainStat;
 };
 
 export type StoreResponseData = {
@@ -54,18 +55,35 @@ export default (positionInfo: MapPositionInfo | undefined) => {
 
       setLoading(true);
       axios
-        .get<StoreResponseData>(
-          `https://nearby-maskmap.herokuapp.com/api/mask`,
-          {
-            params: {
-              lat: positionInfo.center.getLat(),
-              lng: positionInfo.center.getLng(),
-              m: FETCH_DISTANCE * 1.5
-            }
+        .get<StoreResponseData>(process.env.REACT_APP_STORE_API || "", {
+          params: {
+            lat: positionInfo.center.getLat(),
+            lng: positionInfo.center.getLng(),
+            m: FETCH_DISTANCE * 1.5
           }
-        )
+        })
         .then(result => {
-          setStores(result.data.stores);
+          setStores(
+            result.data.stores.map(store => {
+              const { lat, lng, remain_stat, ...extra } = store;
+
+              return {
+                lat,
+                lng,
+                remain_stat: remain_stat ? remain_stat : "empty",
+                distance: getDistance(
+                  { lat, lng },
+                  {
+                    lat: positionInfo.center.getLat(),
+                    lng: positionInfo.center.getLng()
+                  }
+                ),
+                ...extra
+              };
+            })
+          );
+          // DISTANCE 계산
+
           setLastFetchInfo({
             latlng: positionInfo.center,
             time: currentFetchTime.toDate()
@@ -75,6 +93,7 @@ export default (positionInfo: MapPositionInfo | undefined) => {
           setLoading(false);
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [positionInfo]);
 
   const clearStores = useCallback(() => {

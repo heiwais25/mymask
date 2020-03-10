@@ -7,7 +7,7 @@ import useKakaoMap from "../../hooks/useKakaoMap";
 import useKakaoMapBounds from "../../hooks/useKakaoMapPosition";
 import useFetchStores from "../../hooks/useFetchStores";
 import useKakaoMapMarker from "../../hooks/useKakaoMapMarker";
-import { IStore } from "../../hooks/useFetchStores";
+import { IStore, IRemainStat } from "../../hooks/useFetchStores";
 import _ from "lodash";
 import StoreListDialog from "../StoreListDialog";
 import { useHistory, useLocation } from "react-router-dom";
@@ -113,7 +113,23 @@ const Map = styled.div`
 
 export default () => {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [currentMarkers, setCurrentMarkers] = useState<IMarker[]>([]);
+  const [currentMarkers, setCurrentMarkers] = useState<
+    { [key in IRemainStat]: IMarker[] }
+  >({
+    plenty: [],
+    some: [],
+    few: [],
+    empty: []
+  });
+  const [filterButtonState, setFilterButtonState] = useState<
+    { [key in IRemainStat]: boolean }
+  >({
+    plenty: true,
+    some: true,
+    few: true,
+    empty: true
+  });
+
   const [selectedStore, setSelectedStore] = useState<IStore>();
   const [visibleStores, setVisibleStores] = useState<IStore[]>([]);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
@@ -141,7 +157,7 @@ export default () => {
     [history]
   );
 
-  const { addMarker } = useKakaoMapMarker({
+  const { addMarker, setMarkersHidden, setMarkersVisible } = useKakaoMapMarker({
     map,
     clusterMinLevel: 4,
     onClick: selectStoreInMap
@@ -160,6 +176,7 @@ export default () => {
         }
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getGeoLocation, map]);
 
   useEffect(() => {
@@ -167,9 +184,10 @@ export default () => {
     if (stores) {
       newStores = _.uniqBy(stores, "code");
       setVisibleStores(newStores);
-      const newMarker = addMarker(currentMarkers, newStores);
+      const newMarker = addMarker(currentMarkers, newStores, filterButtonState);
       setCurrentMarkers(newMarker);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stores, addMarker]);
 
   useEffect(() => {
@@ -178,6 +196,7 @@ export default () => {
     } else {
       setIsCurrentLocation(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [positions]);
 
   const moveToStore = (store: IStore) => {
@@ -217,10 +236,27 @@ export default () => {
     }
   };
 
+  const toggleFilter = (key: IRemainStat) => {
+    const current = filterButtonState[key];
+
+    if (current) {
+      setMarkersHidden(currentMarkers[key]);
+    } else {
+      setMarkersVisible(currentMarkers[key]);
+    }
+
+    setFilterButtonState({
+      ...filterButtonState,
+      [key]: !current
+    });
+  };
+
   return (
     <Container>
       <Map ref={ref} />
       <MapActions
+        filterButtonState={filterButtonState}
+        toggleFilter={toggleFilter}
         openListDialog={openListDialog}
         detailDialogOpen={detailDialogOpen}
         selectedStore={selectedStore}
