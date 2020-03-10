@@ -2,6 +2,13 @@ import { getDistance } from "geolib";
 import { ILatLngBounds, ILatLng } from "../KakaoMap/types";
 import _ from "lodash";
 
+export const getLatLngDistance = (a: ILatLng, b: ILatLng) => {
+  return getDistance(
+    { lat: a.getLat(), lng: a.getLng() },
+    { lat: b.getLat(), lng: b.getLng() }
+  );
+};
+
 export const getMaxLength = (bounds: ILatLngBounds) => {
   const southWest = bounds.getSouthWest();
   const northEast = bounds.getNorthEast();

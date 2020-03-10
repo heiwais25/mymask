@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import { STORE_LIST_DIALOG, STORE_DETAIL_DIALOG } from "../../constants";
-import { IKakaoMap, ILatLng } from "./types";
+import { IKakaoMap, ILatLng, IMarker } from "./types";
 import styled from "../../Styles/index";
 import MapActions from "../MapActions";
 import useKakaoMap from "../../hooks/useKakaoMap";
@@ -37,7 +37,7 @@ const Container = styled.div`
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.16), 0 2px 2px rgba(0, 0, 0, 0.23);
     padding: 8px;
     border-radius: 4px;
-
+    z-index: 1;
     .store_meta {
       display: none;
     }
@@ -45,6 +45,7 @@ const Container = styled.div`
 
   .store_marker:hover {
     padding: 12px;
+    z-index: 9999;
 
     .store_name {
       font-size: 14px;
@@ -112,6 +113,7 @@ const Map = styled.div`
 
 export default () => {
   const ref = useRef<HTMLDivElement | null>(null);
+  const [currentMarkers, setCurrentMarkers] = useState<IMarker[]>([]);
   const [selectedStore, setSelectedStore] = useState<IStore>();
   const [visibleStores, setVisibleStores] = useState<IStore[]>([]);
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
@@ -165,7 +167,8 @@ export default () => {
     if (stores) {
       newStores = _.uniqBy(stores, "code");
       setVisibleStores(newStores);
-      newStores.forEach(store => addMarker(store));
+      const newMarker = addMarker(currentMarkers, newStores);
+      setCurrentMarkers(newMarker);
     }
   }, [stores, addMarker]);
 

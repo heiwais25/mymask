@@ -1,6 +1,6 @@
 import { useCallback, useState, useEffect } from "react";
 import { IStore } from "./useFetchStores";
-import { ICustomOverlay } from "../Components/KakaoMap/types";
+import { ICustomOverlay, IMarker } from "../Components/KakaoMap/types";
 import { IMap, IMarkerClusterer } from "../Components/KakaoMap/types";
 import moment, { Moment } from "moment";
 
@@ -16,16 +16,6 @@ export default ({
   onClick = (store: IStore) => null
 }: Params) => {
   const [clusterer, setClusterer] = useState<IMarkerClusterer>();
-
-  // key : code
-  // 생성되면 store, marker
-  const lastOverlayStatus: {
-    [key in string]: {
-      created_at: Moment;
-      overlay: ICustomOverlay;
-    };
-  } = {};
-
   useEffect(() => {
     if (map) {
       setClusterer(
@@ -39,54 +29,38 @@ export default ({
   }, [map, clusterMinLevel]);
 
   const addMarker = useCallback(
-    (store: IStore) => {
+    (oldMarkers: IMarker[], newStores: IStore[]) => {
+      // Clear old Markers
+      clusterer?.removeMarkers(oldMarkers);
+      oldMarkers.forEach(marker => marker.setMap(null));
+
+      let newMarkers: IMarker[] = [];
       if (map) {
-        let status = lastOverlayStatus[store.code];
-        let refresh = false;
+        newMarkers = newStores.map(store => {
+          const icon = new window.kakao.maps.MarkerImage(
+            "/images/marker-red.png",
+            new window.kakao.maps.Size(35, 50),
+            {
+              offset: new window.kakao.maps.Point(16, 34),
+              alt: "마커 이미지 예제",
+              shape: "poly",
+              coords: "1,20,1,9,5,2,10,0,21,0,27,3,30,9,30,20,17,33,14,33"
+            }
+          );
 
-        // 시간을 체크하여
-        if (status && moment(store.created_at).isAfter(status.created_at)) {
-          const overlay = status.overlay;
-          overlay.setMap(null);
-
-          delete lastOverlayStatus[store.code];
-          refresh = true;
-          clusterer?.removeMarker(overlay);
-        }
-
-        if (!status || refresh) {
-          const overlay = new window.kakao.maps.CustomOverlay({
-            map,
+          const marker = new window.kakao.maps.Marker({
             position: new window.kakao.maps.LatLng(store.lat, store.lng),
-            content: `<div class="store_marker"><div class="store_name">${store.name}</div>
-                      <div class="store_meta">${store.addr}</div></div>`,
-            xAnchor: 0.5,
-            yAnchor: 1.3,
-            clickable: true
+            image: icon
           });
 
-          window.kakao.maps.event.addListener(overlay, "click", () => {
-            console.log("eee");
-            onClick(store);
-          });
-
-          // const marker = new window.kakao.maps.Marker({
-          //   position: new window.kakao.maps.LatLng(store.lat, store.lng)
-          // });
-
-          // marker.setMap(map);
-          // customOverlay.setMap(map);
-          clusterer?.addMarker(overlay);
-
-          // Save for compare in later
-          lastOverlayStatus[store.code] = {
-            created_at: moment(store.created_at),
-            overlay
-          };
-        }
+          marker.setMap(map);
+          return marker;
+          // Save markers
+        });
+        clusterer?.addMarkers(newMarkers);
       }
+      return newMarkers;
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [map, clusterer]
   );
 

@@ -1,7 +1,10 @@
 import { useState, useEffect, useCallback } from "react";
 import { MapPositionInfo } from "./useKakaoMapPosition";
-import { getMaxLength } from "../Components/utils/maps";
+import { getLatLngDistance } from "../Components/utils/maps";
 import axios from "axios";
+import moment from "moment";
+import { ILatLng } from "../Components/KakaoMap/types";
+import { TIME_INTERVAL, FETCH_DISTANCE } from "../constants";
 
 export type IStore = {
   code: number;
@@ -23,12 +26,32 @@ export type StoreResponseData = {
   stores: IStore[];
 };
 
+type lastFetchInfo = {
+  latlng?: ILatLng;
+  time?: Date;
+};
+
 export default (positionInfo: MapPositionInfo | undefined) => {
   const [stores, setStores] = useState<IStore[]>([]);
   const [loading, setLoading] = useState(false);
+  const [lastFetchInfo, setLastFetchInfo] = useState<lastFetchInfo>({});
 
   useEffect(() => {
     if (positionInfo) {
+      const currentFetchTime = moment();
+      // If the limit doesn't change, doesn't fetch
+      if (
+        lastFetchInfo.time &&
+        currentFetchTime.isBefore(
+          moment(lastFetchInfo.time).add(TIME_INTERVAL, "m")
+        ) &&
+        lastFetchInfo.latlng &&
+        getLatLngDistance(positionInfo.center, lastFetchInfo.latlng) <
+          FETCH_DISTANCE
+      ) {
+        return;
+      }
+
       setLoading(true);
       axios
         .get<StoreResponseData>(
@@ -37,12 +60,16 @@ export default (positionInfo: MapPositionInfo | undefined) => {
             params: {
               lat: positionInfo.center.getLat(),
               lng: positionInfo.center.getLng(),
-              m: getMaxLength(positionInfo.bounds) / 2
+              m: FETCH_DISTANCE * 1.5
             }
           }
         )
         .then(result => {
           setStores(result.data.stores);
+          setLastFetchInfo({
+            latlng: positionInfo.center,
+            time: currentFetchTime.toDate()
+          });
         })
         .finally(() => {
           setLoading(false);

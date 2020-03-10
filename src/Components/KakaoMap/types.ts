@@ -9,6 +9,13 @@ export type IKakaoMap = {
   LatLng: {
     new (lat: number, lng: number): ILatLng;
   };
+  Size: {
+    new (width: number, height: number): ISize;
+  };
+  Point: {
+    new (x: number, y: number): IPoint;
+  };
+
   Map: {
     new (ref: HTMLDivElement | null, options: IMapOption): IMap;
   };
@@ -21,7 +28,22 @@ export type IKakaoMap = {
       opacity?: number;
       range?: number;
       zIndex?: number;
+      image?: IMarkerImage;
     }): IMarker;
+  };
+  MarkerImage: {
+    new (
+      src: string,
+      size: ISize,
+      option: {
+        alt?: string;
+        coords?: string;
+        shape?: string;
+        offset?: IPoint;
+        spriteOrigin?: IPoint;
+        spriteSize?: ISize;
+      }
+    ): IMarkerImage;
   };
   InfoWindow: {
     new (option: {
@@ -72,6 +94,16 @@ export type ILatLng = {
   getLat: () => number;
   getLng: () => number;
   equals: (latLng: ILatLng) => boolean;
+};
+
+export type ISize = {
+  equals: (size: ISize) => boolean;
+  toString: () => string;
+};
+
+export type IPoint = {
+  equals: (point: IPoint) => boolean;
+  toString: () => string;
 };
 
 export type IMapOption = {
@@ -125,6 +157,8 @@ export type IMarker = {
   setClickable: (clickable: boolean) => void;
   getClickable: () => boolean;
 };
+
+export type IMarkerImage = {};
 
 export type IInfoWindow = {
   open: (map: IMap, marker: IMarker) => void;
