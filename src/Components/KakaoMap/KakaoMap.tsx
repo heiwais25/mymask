@@ -115,26 +115,19 @@ const Map = styled.div`
   height: 100%;
 `;
 
-export default () => {
+type Props = {
+  markersVisibility: { [key in IRemainStat]: boolean };
+};
+
+export default ({ markersVisibility }: Props) => {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [currentMarkers, setCurrentMarkers] = useState<
-    { [key in IRemainStat]: IMarker[] }
-  >({
+  const [currentMarkers, setCurrentMarkers] = useState<{ [key in IRemainStat]: IMarker[] }>({
     plenty: [],
     some: [],
     few: [],
     empty: []
   });
   const [overlays, setOverlays] = useState<ICustomOverlay[]>([]);
-  const [filterButtonState, setFilterButtonState] = useState<
-    { [key in IRemainStat]: boolean }
-  >({
-    plenty: true,
-    some: true,
-    few: true,
-    empty: true
-  });
-
   const [selectedStore, setSelectedStore] = useState<IStore>();
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [currentLocation, setCurrentLocation] = useState<ILatLng>();
@@ -188,11 +181,7 @@ export default () => {
     let newStores: IStore[] = [];
     if (stores) {
       newStores = _.uniqBy(stores, "code");
-      const { markers, overlays } = addMarker(
-        currentMarkers,
-        newStores,
-        filterButtonState
-      );
+      const { markers, overlays } = addMarker(currentMarkers, newStores, markersVisibility);
       setCurrentMarkers(markers);
       setOverlays(overlays);
     }
@@ -255,41 +244,33 @@ export default () => {
     overlays.forEach(overlay => overlay.setMap(null));
   };
 
-  const toggleFilter = (key: IRemainStat) => {
-    const current = filterButtonState[key];
-
-    if (current) {
-      setMarkersHidden(currentMarkers[key]);
-    } else {
-      setMarkersVisible(currentMarkers[key]);
-    }
-
-    setFilterButtonState({
-      ...filterButtonState,
-      [key]: !current
+  useEffect(() => {
+    Object.keys(markersVisibility).forEach(rawKey => {
+      const key = rawKey as IRemainStat;
+      if (markersVisibility[key]) {
+        setMarkersVisible(currentMarkers[key]);
+      } else {
+        setMarkersHidden(currentMarkers[key]);
+        overlays.forEach(overlay => overlay.setMap(null));
+      }
     });
-    overlays.forEach(overlay => overlay.setMap(null));
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [markersVisibility]);
 
   return (
     <Container>
       <Map ref={ref} />
       <MapActions
-        filterButtonState={filterButtonState}
-        toggleFilter={toggleFilter}
         openListDialog={openListDialog}
         detailDialogOpen={detailDialogOpen}
         selectedStore={selectedStore}
         loading={loading}
-        hasItem={
-          stores.filter(store => filterButtonState[store.remain_stat]).length >
-          0
-        }
+        hasItem={stores.filter(store => markersVisibility[store.remain_stat]).length > 0}
         moveToCurrentLocation={moveToCurrentLocation}
         isCurrentLocation={isCurrentLocation}
       />
       <StoreListDialog
-        stores={stores.filter(store => filterButtonState[store.remain_stat])}
+        stores={stores.filter(store => markersVisibility[store.remain_stat])}
         handleItemClick={moveToStore}
       />
     </Container>

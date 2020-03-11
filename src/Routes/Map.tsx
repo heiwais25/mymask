@@ -1,20 +1,50 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "../Styles/index";
 import KakaoMap from "../Components/KakaoMap/KakaoMap";
+import TopFilters from "../Components/TopFilters";
+import { IRemainStat } from "../hooks/useFetchStores";
 
 const Container = styled.div`
   position: relative;
   width: 100%;
-  height: calc(100vh - 44px);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
   svg {
     fill: ${props => props.theme.darkGreyColor};
   }
 `;
 
+const MapBox = styled.div`
+  width: 100%;
+  height: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+`;
+
 export default () => {
+  const [markersVisibility, setMarkersVisibility] = useState<{ [key in IRemainStat]: boolean }>({
+    plenty: true,
+    some: true,
+    few: true,
+    empty: true
+  });
+
+  const toggleFilter = (key: IRemainStat) => {
+    const current = markersVisibility[key];
+    setMarkersVisibility({
+      ...markersVisibility,
+      [key]: !current
+    });
+  };
+
   return (
     <Container>
-      <KakaoMap />
+      <TopFilters markersVisibility={markersVisibility} toggleFilter={toggleFilter} />
+      <MapBox>
+        <KakaoMap markersVisibility={markersVisibility} />
+      </MapBox>
     </Container>
   );
 };

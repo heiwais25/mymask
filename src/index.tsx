@@ -2,6 +2,7 @@ import React from "react";
 import "react-app-polyfill/ie9";
 import ReactDOM from "react-dom";
 import App from "./Components/App";
+import "./index.scss";
 
 ReactDOM.render(<App />, document.getElementById("root"));
 

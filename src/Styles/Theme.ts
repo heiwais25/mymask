@@ -36,12 +36,24 @@ const theme = {
     `,
   blueColor: "#3498db",
 
+  primaryColor: "#1abc9c",
+
+  topBox: `
+  position: relative;
+  z-index: 10;
+  height: 44px;
+  background-color: #fff;
+  display: flex;
+  box-shadow: 0 3px 3px 0px rgba(0, 0, 0, 0.19);
+  padding: 10px;  
+  `,
+
   unselectableText: `
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -o-user-select: none;
-  user-select: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
   `,
 
   boardWidth: `${BOARD_WIDTH}`,
@@ -52,7 +64,7 @@ const theme = {
 
   borderGreyColor: "#cacaca",
 
-  lightGreyColor: "#FDFDFC",
+  lightGreyColor: "#ecf0f1",
 
   redFocusedColor: "#d8665c",
   blueFocuesdColor: "#127965",

@@ -11,14 +11,14 @@ const styles = (theme: Theme) =>
     root: {
       margin: 0,
       padding: theme.spacing(1.5),
-      backgroundColor: "#FAFAFA",
-      color: "black"
+      backgroundColor: "#1abc9c",
+      color: "white"
     },
     closeButton: {
       position: "absolute",
       right: theme.spacing(1),
       top: theme.spacing(1),
-      color: "black"
+      color: "white"
     }
   });
 

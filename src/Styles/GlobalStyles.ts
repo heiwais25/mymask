@@ -13,6 +13,13 @@ export default createGlobalStyle`
         font-size:14px;
         font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
         padding-top: 0px
+        height: 100%;
+    }
+    html {
+        height: 100%;
+    }
+    #root {
+        height: 100%;
     }
     a {
         color:${props => props.theme.blueColor};

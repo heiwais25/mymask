@@ -3,14 +3,10 @@ import styled from "../Styles/index";
 import moment from "moment";
 
 const Container = styled.div`
-  position: relative;
-  z-index: 10;
-  height: 44px;
-  background-color: #fff;
-  display: flex;
+  ${props => props.theme.topBox};
+  color: white;
+  background-color: #1abc9c;
   justify-content: space-between;
-  box-shadow: 0 3px 3px 0px rgba(0, 0, 0, 0.19);
-  padding: 10px;
 `;
 
 const Col = styled.div`
@@ -49,14 +45,13 @@ export default () => {
         <Title>
           {/* <Link to="/"> */}
           <Bold>마이마스크</Bold>
-          
+
           {/* </Link> */}
         </Title>
       </Col>
       <Col>
         <ColItem>
-          오늘의 마스크 5부제{" "}
-          <SubBold>(출생연도 끝자리 {maskRotation[moment().days()]})</SubBold>
+          오늘의 마스크 5부제 <SubBold>(출생연도 끝자리 {maskRotation[moment().days()]})</SubBold>
         </ColItem>
       </Col>
     </Container>

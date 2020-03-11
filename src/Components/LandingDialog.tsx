@@ -69,11 +69,7 @@ const RedText = styled.span`
 
 export default function LandingDialog({ open, handleClose }: Props) {
   return (
-    <Dialog
-      onClose={handleClose}
-      aria-labelledby="customized-dialog-title"
-      open={open}
-    >
+    <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
       <MuiDialogTitle id="customized-dialog-title" onClose={handleClose}>
         알림
       </MuiDialogTitle>
@@ -82,29 +78,33 @@ export default function LandingDialog({ open, handleClose }: Props) {
           본 서비스는 정부 공공 마스크 재고 정보 API를 이용하고 있습니다.
         </Typography>
         <Typography gutterBottom variant="body2">
-          빠른 시일 내에 지역 검색, 알림 등이 추가될 예정입니다. 더 좋은
-          서비스를 제공하기 위해 노력하겠습니다.
+          빠른 시일 내에 지역 검색, 알림 등이 추가될 예정입니다. 더 좋은 서비스를 제공하기 위해
+          노력하겠습니다.
         </Typography>
         <Typography gutterBottom variant="body2">
-          약사 분들을 포함하여 마스크로 인해 고생하시는 분들께 감사의 인사
-          한번씩 해주시면 좋을 것 같습니다.{" "}
+          약사 분들을 포함하여 마스크로 인해 고생하시는 분들께 감사의 인사 한번씩 해주시면 좋을 것
+          같습니다.{" "}
           <span role="img" aria-label="smile">
             😃
           </span>
         </Typography>
         <Typography gutterBottom variant="body1" color="secondary">
+          <RedText>업데이트</RedText>
+        </Typography>
+        <Typography variant="body2">1. 필터 기능이 상단에 추가되었습니다.</Typography>
+        <Typography variant="body2" gutterBottom>
+          2. 하단에 전체 목록을 볼 수 있는 버튼이 추가되었습니다.
+        </Typography>
+
+        <Typography gutterBottom variant="body1" color="secondary">
           <RedText>유의사항</RedText>
         </Typography>
+        <Typography variant="body2">1. 공적 마스크 정보는 5분 이상 지연된 정보입니다.</Typography>
         <Typography variant="body2">
-          1. 공적 마스크 정보는 5분 이상 지연된 정보입니다.
-        </Typography>
-        <Typography variant="body2">
-          2. 3월 15일까지 정부 데이터 공개는 베타서비스 중으로 실수량과 일부
-          차이가 있을 수 있습니다
+          2. 3월 15일까지 정부 데이터 공개는 베타서비스 중으로 실수량과 일부 차이가 있을 수 있습니다
         </Typography>
         <Typography gutterBottom variant="body2">
-          3. 마스크 재고는 구체적인 수치가 공개되지 않으며 다음 4개의 구간으로
-          나타납니다.
+          3. 마스크 재고는 구체적인 수치가 공개되지 않으며 다음 4개의 구간으로 나타납니다.
         </Typography>
         <BottomIcons>
           <IconBox>

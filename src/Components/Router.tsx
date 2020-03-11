@@ -7,13 +7,15 @@ import Header from "./Header";
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  /* position: relative; */
-  height: 100vh;
+  height: 100%;
 `;
 
 const HeaderBox = styled.div``;
 
-const PageBox = styled.div``;
+const PageBox = styled.div`
+  display: flex;
+  height: 100%;
+`;
 
 export default () => (
   <Container>
