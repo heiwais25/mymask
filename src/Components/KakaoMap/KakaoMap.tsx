@@ -243,10 +243,6 @@ export default ({ markersVisibility }: Props) => {
   };
 
   const moveToCurrentLocation = async () => {
-    const permission = await revokePermission();
-    console.log(permission);
-    if (!permission) return;
-
     if (currentLocation) {
       moveToLatLng(currentLocation);
     }

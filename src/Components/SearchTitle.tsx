@@ -14,7 +14,7 @@ const styles = (theme: Theme) =>
     root: {
       display: "flex",
       margin: 0,
-      padding: theme.spacing(1.5),
+      padding: theme.spacing(1.5, 2),
       backgroundColor: "#2980b9",
       color: "white",
       height: "55px",

@@ -78,7 +78,7 @@ export default function LandingDialog({ open, handleClose }: Props) {
           본 서비스는 정부 공공 마스크 재고 정보 API를 이용하고 있습니다.
         </Typography>
         <Typography gutterBottom variant="body2">
-          빠른 시일 내에 지역 검색, 알림 등이 추가될 예정입니다. 더 좋은 서비스를 제공하기 위해
+          빠른 시일 내에 알림 추가, 어플리케이션이 제작될 예정입니다. 더 좋은 서비스를 제공하기 위해
           노력하겠습니다.
         </Typography>
         <Typography gutterBottom variant="body2">
@@ -91,9 +91,12 @@ export default function LandingDialog({ open, handleClose }: Props) {
         <Typography gutterBottom variant="body1" color="secondary">
           <RedText>업데이트</RedText>
         </Typography>
-        <Typography variant="body2">1. 필터 기능이 상단에 추가되었습니다.</Typography>
+        <Typography variant="body2">
+          1. 원하는 장소를 검색할 수 있는 기능이 추가되었습니다.
+        </Typography>
+        <Typography variant="body2">2. 필터 기능이 추가되었습니다.</Typography>
         <Typography variant="body2" gutterBottom>
-          2. 하단에 전체 목록을 볼 수 있는 버튼이 추가되었습니다.
+          2. 전체 목록을 볼 수 있는 버튼이 추가되었습니다.
         </Typography>
 
         <Typography gutterBottom variant="body1" color="secondary">
@@ -125,7 +128,7 @@ export default function LandingDialog({ open, handleClose }: Props) {
           </IconBox>
         </BottomIcons>
         <Typography gutterBottom variant="body2">
-          My Mask
+          마이마스크 (My Mask)
         </Typography>
         <Typography gutterBottom variant="body2">
           개발자 : 김종현 (jongkoo25@gmail.com)

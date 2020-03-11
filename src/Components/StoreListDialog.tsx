@@ -147,7 +147,7 @@ export default ({ stores, handleItemClick }: Props) => {
   };
 
   return (
-    <Dialog fullScreen={isMobile} fullWidth maxWidth="md" open={open} onClose={handleClose}>
+    <Dialog fullScreen={isMobile} fullWidth maxWidth="sm" open={open} onClose={handleClose}>
       <MuiDialogTitle id="customized-dialog-title" onClose={handleClose}>
         주변 목록
       </MuiDialogTitle>

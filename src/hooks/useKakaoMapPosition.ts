@@ -18,6 +18,8 @@ export default ({ map, debounce = 1000 }: Params) => {
 
   useEffect(() => {
     if (map && !firstInit) {
+      setPositions({ bounds: map.getBounds(), center: map.getCenter() });
+
       window.kakao.maps.event.addListener(map, "bounds_changed", () => {
         if (timeouts.length > 0) {
           timeouts.forEach(id => clearTimeout(id));

@@ -9,15 +9,16 @@ import CloseIcon from "@material-ui/icons/Close";
 const styles = (theme: Theme) =>
   createStyles({
     root: {
+      display: "flex",
       margin: 0,
-      padding: theme.spacing(1.5),
+      padding: theme.spacing(1.5, 2),
       backgroundColor: "#2980b9",
-      color: "white"
+      color: "white",
+      height: "55px",
+      alignItems: "center",
+      justifyContent: "space-between"
     },
     closeButton: {
-      position: "absolute",
-      right: theme.spacing(1),
-      top: theme.spacing(1),
       color: "white"
     }
   });

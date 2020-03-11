@@ -8,7 +8,7 @@ import { SEARCH_DIALOG } from "../constants";
 const Container = styled.div`
   ${props => props.theme.topBox};
   color: white;
-  height: 66px;
+  height: 55px;
   background-color: ${props => props.theme.primaryColor};
   justify-content: space-between;
   align-items: center;

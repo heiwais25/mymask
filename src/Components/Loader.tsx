@@ -24,7 +24,7 @@ const Loader = styled.div`
   text-align: center;
   animation: ${Animation} 2s linear infinite;
   svg {
-    fill: ${props => props.theme.blueColor};
+    fill: ${props => props.theme.primaryColor} !important;
   }
 `;
 

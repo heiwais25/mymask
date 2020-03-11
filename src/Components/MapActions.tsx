@@ -3,6 +3,7 @@ import styled from "../Styles/index";
 import { Location, UpArrow, Mail } from "../Icons";
 import { IStore } from "../hooks/useFetchStores";
 import Loader from "./Loader";
+import { isMobile } from "react-device-detect";
 
 const RightSideButtons = styled.div`
   position: absolute;
@@ -30,7 +31,8 @@ const IconButton = styled.div<IconButtonProps>`
 
 const BottomSideButtons = styled.div`
   position: absolute;
-  bottom: ${props => props.theme.mapActionPadding};
+  bottom: ${props => (isMobile ? props.theme.mapActionPadding : "")};
+  top: ${props => (!isMobile ? props.theme.mapActionPadding : "")};
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
@@ -42,19 +44,35 @@ const BottomSideButtons = styled.div`
 
 type ListViewButtonProps = {
   "data-disabled"?: boolean;
+  "data-mobile"?: boolean;
 };
 
 const ListViewButton = styled.div<ListViewButtonProps>`
   cursor: pointer;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-  background-color: white;
+  background-color: ${props => (props["data-mobile"] ? props.theme.primaryColor : "white")};
+  color: ${props => (props["data-mobile"] ? "white" : "black")};
   padding: 8px 16px;
   border-radius: 16px;
   display: flex;
   align-items: center;
+  svg {
+    fill: white !important;
+  }
 `;
 
-const ButtonText = styled.span``;
+const ButtonText = styled.span`
+  pointer-events: none;
+  -webkit-user-select: none; /* Chrome/Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+ */
+
+  /* Rules below not implemented in browsers yet */
+  -o-user-select: none;
+  user-select: none;
+`;
+
+const ButtonEmptyText = styled(ButtonText)``;
 
 const LoaderBox = styled.div`
   position: absolute;
@@ -133,9 +151,9 @@ export default ({
 
       {!loading && (
         <BottomSideButtons>
-          <ListViewButton onClick={openListDialog}>
+          <ListViewButton data-mobile={hasItem} onClick={openListDialog}>
             <ButtonText>{hasItem ? "목록 보기" : "지도를 움직여보세요"}</ButtonText>
-            {hasItem && <UpArrow size={12} />}
+            {hasItem && isMobile && <UpArrow size={12} />}
           </ListViewButton>
           {selectedStore && detailDialogOpen && <DetailInfoBox />}
         </BottomSideButtons>
