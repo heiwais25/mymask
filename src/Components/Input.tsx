@@ -4,7 +4,7 @@ import styled from "styled-components";
 const Container = styled.input`
   border: 0;
   border: ${props => props.theme.boxBorder};
-  border-radius: ${props => props.theme.borderRadius};
+  /* border-radius: ${props => props.theme.borderRadius}; */
   background-color: ${props => props.theme.bgColor};
   height: 32px;
   padding: 0 6px;
@@ -14,7 +14,7 @@ const Container = styled.input`
 type Props = {
   placeholder: string;
   required?: boolean;
-  value: string;
+  value?: string;
   onChange: (e: FormEvent<HTMLInputElement>) => void;
   type?: string;
   className?: string;
@@ -35,6 +35,7 @@ const Input = ({
     value={value}
     onChange={onChange}
     type={type}
+    autoFocus
   />
 );
 

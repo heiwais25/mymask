@@ -14,7 +14,7 @@ export const materialTheme = createMuiTheme({
   },
   palette: {
     primary: {
-      main: "#16a085"
+      main: "#2980b9"
     }
   },
   overrides: {

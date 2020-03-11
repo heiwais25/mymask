@@ -33,11 +33,7 @@ const rangeString: { [key in IRemainStat]: string } = {
   empty: "0 ~ 1개"
 };
 
-export default ({
-  map,
-  clusterMinLevel = 7,
-  onClick = (store: IStore) => null
-}: Params) => {
+export default ({ map, clusterMinLevel = 7, onClick = (store: IStore) => null }: Params) => {
   const [clusterer, setClusterer] = useState<IMarkerClusterer>();
   const [overlays, setOverlays] = useState<ICustomOverlay[]>([]);
 
@@ -92,8 +88,8 @@ export default ({
             {
               offset: new window.kakao.maps.Point(16, 34),
               alt: "markerOfStore",
-              shape: "poly",
-              coords: "1,20,1,9,5,2,10,0,21,0,27,3,30,9,30,20,17,33,14,33"
+              shape: "rect"
+              // coords: "1,20,1,9,5,2,10,0,21,0,27,3,30,9,30,20,17,33,14,33"
             }
           );
 
@@ -109,11 +105,11 @@ export default ({
             store.distance
           } m</span></div><div style="white-space:normal; line-height: 1.3;"> ${
             store.addr
-          } </div><div> 입고시간 : ${moment(
-            store.stock_at
-          ).fromNow()} </div><div> 업데이트 : ${moment(
-            store.created_at
-          ).fromNow()} </div></div><div class="_window_col _stock" style="justify-content: center; align-items: center; display: ;" > <span style="text-align: center; font-size: 14px;"> 재고수 </span> <span class="${
+          } </div><div> 입고시간 : ${
+            !!store.stock_at ? moment(new Date(store.stock_at)).fromNow() : "확인중"
+          } </div><div> 업데이트 : ${
+            !!store.created_at ? moment(new Date(store.created_at)).fromNow() : "확인중"
+          } </div></div><div class="_window_col _stock" style="justify-content: center; align-items: center; display: ;" > <span style="text-align: center; font-size: 14px;"> 재고수 </span> <span class="${
             store.remain_stat
           }" style="font-size: 20px;"> ${
             statusString[store.remain_stat]

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "../Styles/index";
-import { Location, UpArrow } from "../Icons";
+import { Location, UpArrow, Mail } from "../Icons";
 import { IStore } from "../hooks/useFetchStores";
 import Loader from "./Loader";
 
@@ -75,6 +75,13 @@ const BottomSign = styled.div`
   align-items: flex-end;
 `;
 
+// const BottomLeft = styled.div`
+//   position: absolute;
+//   bottom: ${props => props.theme.mapActionPadding};
+//   left: ${props => props.theme.mapActionPadding};
+//   z-index: 10;
+// `;
+
 const MeInfo = styled.span`
   text-shadow: 0.5px 0.5px 0.5px gray;
   :not(:last-child) {
@@ -85,6 +92,7 @@ const MeInfo = styled.span`
 const DetailInfoBox = styled.div``;
 
 type Props = {
+  geoGranted: boolean;
   hasItem: boolean;
   loading: boolean;
   selectedStore?: IStore;
@@ -95,6 +103,7 @@ type Props = {
 };
 
 export default ({
+  geoGranted,
   selectedStore,
   detailDialogOpen = false,
   openListDialog,
@@ -105,15 +114,23 @@ export default ({
 }: Props) => {
   return (
     <>
-      <RightSideButtons>
-        <IconButton onClick={moveToCurrentLocation} data-focused={isCurrentLocation}>
-          <Location size={24} />
-        </IconButton>
-      </RightSideButtons>
+      {geoGranted && (
+        <RightSideButtons>
+          <IconButton onClick={moveToCurrentLocation} data-focused={isCurrentLocation}>
+            <Location size={24} />
+          </IconButton>
+        </RightSideButtons>
+      )}
       <BottomSign>
         <MeInfo>김종현</MeInfo>
         <MeInfo>jongkoo25@gmail.com</MeInfo>
       </BottomSign>
+      {/* <BottomLeft>
+        <IconButton onClick={() => window.open("mailto:jongkoo25@gmail.com?subject=제안하기")}>
+          <Mail size={24} />
+        </IconButton>
+      </BottomLeft> */}
+
       {!loading && (
         <BottomSideButtons>
           <ListViewButton onClick={openListDialog}>

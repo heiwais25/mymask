@@ -12,6 +12,7 @@
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
+    "awesome-debounce-promise": "^2.1.0",
     "axios": "^0.19.2",
     "babel-cli": "^6.26.0",
     "babel-preset-es2015": "^6.24.1",
@@ -24,6 +25,7 @@
     "node-sass": "^4.13.1",
     "react": "^16.13.0",
     "react-app-polyfill": "^1.0.6",
+    "react-autosuggest": "^9.4.3",
     "react-device-detect": "^1.11.14",
     "react-dom": "^16.13.0",
     "react-helmet": "^5.2.1",
@@ -35,6 +37,7 @@
     "react-window": "^1.8.5",
     "redux-actions": "^2.6.5",
     "redux-pender": "^2.0.12",
+    "rxjs": "^6.5.4",
     "styled-components": "^4.4.1",
     "styled-reset": "^4.1.1",
     "typescript": "~3.7.2"
@@ -63,6 +66,7 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.149",
+    "@types/react-autosuggest": "^9.3.13",
     "@types/react-helmet": "^5.0.15",
     "@types/react-router-dom": "^5.1.3",
     "@types/react-virtualized-auto-sizer": "^1.0.0",

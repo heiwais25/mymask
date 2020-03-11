@@ -36,16 +36,16 @@ const theme = {
     `,
   blueColor: "#3498db",
 
-  primaryColor: "#1abc9c",
+  primaryColor: "#2980b9",
+  lightPrimaryColor: "#5B99DD",
 
   topBox: `
-  position: relative;
-  z-index: 10;
+  z-index: 5;
   height: 44px;
   background-color: #fff;
   display: flex;
   box-shadow: 0 3px 3px 0px rgba(0, 0, 0, 0.19);
-  padding: 10px;  
+  padding: 0px 15px;  
   `,
 
   unselectableText: `

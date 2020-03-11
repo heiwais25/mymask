@@ -16,13 +16,17 @@ const ListItemContainer = styled.div`
   display: flex;
   width: 100%;
   justify-content: space-between;
+  position: relative;
 `;
 
 const Cols = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  word-break: keep-all;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  min-width: 0;
   :not(:last-child) {
     padding-right: 16px;
   }
@@ -37,7 +41,7 @@ const Row = styled.div`
 const TitleBox = styled.div`
   display: flex;
   align-items: center;
-  padding-bottom: 8px;
+  padding-bottom: 4px;
 `;
 
 const Title = styled.span`
@@ -50,7 +54,14 @@ type StatusProps = {
   "data-stat": IRemainStat;
 };
 
-const Status = styled.span<StatusProps>`
+const Status = styled.div<StatusProps>`
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 8px;
+
+  display: flex;
+  align-items: center;
   font-size: 18px;
   text-align: center;
   font-weight: 600;
@@ -64,7 +75,13 @@ const Status = styled.span<StatusProps>`
       : props.theme.greyColor};
 `;
 
-const Text = styled.span``;
+const Text = styled.span`
+  color: ${props => props.theme.darkGreyColor};
+`;
+
+const FakeBox = styled.div`
+  width: 60px;
+`;
 
 const Meta = styled.span``;
 
@@ -84,7 +101,7 @@ export default ({ stores, handleItemClick }: Props) => {
         setOpen(true);
         setVisibleStores(stores.sort((a, b) => a.distance - b.distance));
       } else {
-        history.goBack();
+        history.replace({ hash: "" });
       }
     } else {
       setOpen(false);
@@ -120,24 +137,17 @@ export default ({ stores, handleItemClick }: Props) => {
           </Cols>
           <Cols>
             <Row>
-              <Status data-stat={store.remain_stat}>
-                {statusString[store.remain_stat]}
-              </Status>
+              <FakeBox />
             </Row>
           </Cols>
+          <Status data-stat={store.remain_stat}>{statusString[store.remain_stat]}</Status>
         </ListItemContainer>
       </ListItem>
     );
   };
 
   return (
-    <Dialog
-      fullScreen={isMobile}
-      fullWidth
-      maxWidth="sm"
-      open={open}
-      onClose={handleClose}
-    >
+    <Dialog fullScreen={isMobile} fullWidth maxWidth="md" open={open} onClose={handleClose}>
       <MuiDialogTitle id="customized-dialog-title" onClose={handleClose}>
         주변 목록
       </MuiDialogTitle>
@@ -155,7 +165,7 @@ export default ({ stores, handleItemClick }: Props) => {
             <FixedSizeList
               height={height}
               width={width}
-              itemSize={78}
+              itemSize={60}
               itemCount={visibleStores.length}
             >
               {RowItem}

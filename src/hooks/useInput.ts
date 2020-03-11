@@ -1,6 +1,12 @@
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, ChangeEvent } from "react";
 
-export default (initialValue = "") => {
+export type IInput = {
+  value: string;
+  onChange: (e: FormEvent<HTMLInputElement>) => void;
+  setValue: (value: string) => void;
+};
+
+export default (initialValue = ""): IInput => {
   const [value, setValue] = useState(initialValue);
 
   const onChange = (e: FormEvent<HTMLInputElement>) => {

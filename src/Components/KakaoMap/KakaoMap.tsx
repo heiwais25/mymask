@@ -12,9 +12,10 @@ import _ from "lodash";
 import StoreListDialog from "../StoreListDialog";
 import { useHistory, useLocation } from "react-router-dom";
 import { useCallback } from "react";
-import useGeoLocation from "../../hooks/useGeoLocation";
+import { useGeoLocation, revokePermission } from "../../hooks/useGeoLocation";
 import { isLatLngEqaul } from "../utils/maps";
 import { isMobile } from "react-device-detect";
+import SearchDialog from "../SearchDialog";
 
 declare global {
   interface Window {
@@ -132,6 +133,8 @@ export default ({ markersVisibility }: Props) => {
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [currentLocation, setCurrentLocation] = useState<ILatLng>();
   const [isCurrentLocation, setIsCurrentLocation] = useState(false);
+  const [geoGranted, setGeoGranted] = useState(false);
+
   const getGeoLocation = useGeoLocation();
 
   const history = useHistory();
@@ -166,11 +169,13 @@ export default ({ markersVisibility }: Props) => {
     if (map) {
       getGeoLocation(
         latLng => {
+          setGeoGranted(true);
           moveToLatLng(latLng);
           setCurrentLocation(latLng);
         },
         () => {
-          alert("위치정보를 가져오는데 실패했습니다.");
+          setGeoGranted(false);
+          console.log("Failed to load geolocation");
         }
       );
     }
@@ -202,7 +207,7 @@ export default ({ markersVisibility }: Props) => {
     if (map) {
       const latlng = new window.kakao.maps.LatLng(store.lat, store.lng);
       map.setCenter(latlng);
-      map.setLevel(3);
+      map.setLevel(isMobile ? 4 : 3);
       overlays.forEach(overlay => {
         if (isLatLngEqaul(overlay.getPosition(), latlng)) {
           overlay.setMap(map);
@@ -237,7 +242,11 @@ export default ({ markersVisibility }: Props) => {
     overlays.forEach(overlay => overlay.setMap(null));
   };
 
-  const moveToCurrentLocation = () => {
+  const moveToCurrentLocation = async () => {
+    const permission = await revokePermission();
+    console.log(permission);
+    if (!permission) return;
+
     if (currentLocation) {
       moveToLatLng(currentLocation);
     }
@@ -261,6 +270,7 @@ export default ({ markersVisibility }: Props) => {
     <Container>
       <Map ref={ref} />
       <MapActions
+        geoGranted={geoGranted}
         openListDialog={openListDialog}
         detailDialogOpen={detailDialogOpen}
         selectedStore={selectedStore}
@@ -273,6 +283,7 @@ export default ({ markersVisibility }: Props) => {
         stores={stores.filter(store => markersVisibility[store.remain_stat])}
         handleItemClick={moveToStore}
       />
+      <SearchDialog handleItemClick={moveToLatLng} />
     </Container>
   );
 };

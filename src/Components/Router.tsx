@@ -17,19 +17,21 @@ const PageBox = styled.div`
   height: 100%;
 `;
 
-export default () => (
-  <Container>
-    <HeaderBox>
-      <Header />
-      {/* <Search /> */}
-    </HeaderBox>
-    <PageBox>
-      <Switch>
-        <Route path="/">
-          <Map />
-        </Route>
-        <Redirect path="*" to="/" />
-      </Switch>
-    </PageBox>
-  </Container>
-);
+export default () => {
+  return (
+    <Container>
+      <HeaderBox>
+        <Header />
+        {/* <Search /> */}
+      </HeaderBox>
+      <PageBox>
+        <Switch>
+          <Route path="/">
+            <Map />
+          </Route>
+          <Redirect path="*" to="/" />
+        </Switch>
+      </PageBox>
+    </Container>
+  );
+};

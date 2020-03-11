@@ -94,6 +94,54 @@ export type IKakaoMap = {
       callback: () => void
     ) => void;
   };
+  services: {
+    Places: {
+      new (): IPlace;
+    };
+  };
+};
+
+export type IMeta = {
+  total_count: number;
+  pageable_count: number;
+  is_end: boolean;
+};
+
+export type IDocument = {
+  address_name: string;
+  address_type: string;
+  x: string;
+  y: string;
+  address: string;
+  road_address: string;
+  place_name: string;
+  category_name: string;
+  category_group_code: string;
+  category_group_name: string;
+};
+
+export type IStatus = "OK" | "ZERO_RESULT" | "ERROR";
+
+export type IPlace = {
+  setMap: (map: IMap) => void;
+  keywordSearch: (
+    keyword: string,
+    callback: (result: IDocument[], status: IStatus) => void,
+    options?: {
+      category_group_code?: string;
+      location?: ILatLng;
+      x?: number;
+      y?: number;
+      radius?: number;
+      bounds?: ILatLngBounds;
+      rect?: string;
+      size?: number;
+      page?: number;
+      sort?: string;
+      useMapCenter?: boolean;
+      useMapBounds?: boolean;
+    }
+  ) => void;
 };
 
 export type ILatLng = {

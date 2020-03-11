@@ -11,7 +11,7 @@ const styles = (theme: Theme) =>
     root: {
       margin: 0,
       padding: theme.spacing(1.5),
-      backgroundColor: "#1abc9c",
+      backgroundColor: "#2980b9",
       color: "white"
     },
     closeButton: {
