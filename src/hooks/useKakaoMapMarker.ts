@@ -49,7 +49,6 @@ export default ({
           averageCenter: true,
           minLevel: clusterMinLevel,
           gridSize: 80,
-          calculator: [0],
           minClusterSize: 1
         })
       );
