@@ -79,9 +79,7 @@ export default function LandingDialog({ open, handleClose }: Props) {
       </MuiDialogTitle>
       <DialogContent dividers>
         <Typography gutterBottom variant="body2">
-          본 서비스는 정부 공공 마스크 재고 정보 API를 이용하고 있습니다. 3월
-          11일 오전 8시에 시작될 예정이며,{" "}
-          <RedText>3월 15일까지는 베타테스트 기간</RedText>입니다.
+          본 서비스는 정부 공공 마스크 재고 정보 API를 이용하고 있습니다.
         </Typography>
         <Typography gutterBottom variant="body2">
           빠른 시일 내에 지역 검색, 알림 등이 추가될 예정입니다. 더 좋은
@@ -101,7 +99,8 @@ export default function LandingDialog({ open, handleClose }: Props) {
           1. 공적 마스크 정보는 5분 이상 지연된 정보입니다.
         </Typography>
         <Typography variant="body2">
-          2. 약국 사정에 따라실제 수량과 차이가 날 수 있습니다.
+          2. 3월 15일까지 정부 데이터 공개는 베타서비스 중으로 실수량과 일부
+          차이가 있을 수 있습니다
         </Typography>
         <Typography gutterBottom variant="body2">
           3. 마스크 재고는 구체적인 수치가 공개되지 않으며 다음 4개의 구간으로
