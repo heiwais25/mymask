@@ -48,8 +48,8 @@ export default () => {
         </ColItem> */}
         <Title>
           {/* <Link to="/"> */}
-          <Bold>My</Bold>
-          <Bold>Mask</Bold>
+          <Bold>마이마스크</Bold>
+          
           {/* </Link> */}
         </Title>
       </Col>
