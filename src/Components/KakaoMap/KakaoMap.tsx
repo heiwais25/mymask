@@ -132,7 +132,7 @@ export default () => {
     plenty: true,
     some: true,
     few: true,
-    empty: false
+    empty: true
   });
 
   const [selectedStore, setSelectedStore] = useState<IStore>();
