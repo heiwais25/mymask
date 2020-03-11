@@ -145,7 +145,7 @@ export default () => {
   const location = useLocation();
 
   const map = useKakaoMap(ref, {
-    center: new window.kakao.maps.LatLng(33.45, 126.57),
+    center: new window.kakao.maps.LatLng(37.566805, 126.9784147),
     level: isMobile ? 4 : 3,
     disableDoubleClick: true
   });
