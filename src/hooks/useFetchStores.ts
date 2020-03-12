@@ -6,13 +6,14 @@ import moment from "moment";
 import { ILatLng } from "../Components/KakaoMap/types";
 import { TIME_INTERVAL, FETCH_DISTANCE } from "../constants";
 import { getDistance } from "geolib";
+import { filterStores } from "../storeFilter";
 
 export type IRemainStat = "few" | "empty" | "some" | "plenty";
 
 export type IStore = {
   addr: string;
   name: string;
-  code: number;
+  code: string;
   created_at: string;
   lat: number;
   lng: number;
@@ -43,12 +44,9 @@ export default (positionInfo: MapPositionInfo | undefined) => {
       // If the limit doesn't change, doesn't fetch
       if (
         lastFetchInfo.time &&
-        currentFetchTime.isBefore(
-          moment(lastFetchInfo.time).add(TIME_INTERVAL, "m")
-        ) &&
+        currentFetchTime.isBefore(moment(lastFetchInfo.time).add(TIME_INTERVAL, "m")) &&
         lastFetchInfo.latlng &&
-        getLatLngDistance(positionInfo.center, lastFetchInfo.latlng) <
-          FETCH_DISTANCE
+        getLatLngDistance(positionInfo.center, lastFetchInfo.latlng) < FETCH_DISTANCE
       ) {
         return;
       }
@@ -64,7 +62,7 @@ export default (positionInfo: MapPositionInfo | undefined) => {
         })
         .then(result => {
           setStores(
-            result.data.stores.map(store => {
+            filterStores(result.data.stores).map(store => {
               const { lat, lng, remain_stat, ...extra } = store;
 
               return {

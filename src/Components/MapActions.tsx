@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "../Styles/index";
-import { Location, UpArrow, Mail } from "../Icons";
+import { Location, UpArrow } from "../Icons";
 import { IStore } from "../hooks/useFetchStores";
 import Loader from "./Loader";
 import { isMobile } from "react-device-detect";
@@ -71,8 +71,6 @@ const ButtonText = styled.span`
   -o-user-select: none;
   user-select: none;
 `;
-
-const ButtonEmptyText = styled(ButtonText)``;
 
 const LoaderBox = styled.div`
   position: absolute;
