@@ -66,7 +66,6 @@ export default (positionInfo: MapPositionInfo | undefined) => {
               .filter(store => store.lat && store.lng)
               .map(store => {
                 const { lat, lng, remain_stat, ...extra } = store;
-                console.log(lat, lng);
                 return {
                   lat,
                   lng,
