@@ -62,29 +62,31 @@ export default (positionInfo: MapPositionInfo | undefined) => {
         })
         .then(result => {
           setStores(
-            filterStores(result.data.stores).map(store => {
-              const { lat, lng, remain_stat, ...extra } = store;
-
-              return {
-                lat,
-                lng,
-                remain_stat:
-                  remain_stat !== "empty" &&
-                  remain_stat !== "few" &&
-                  remain_stat !== "some" &&
-                  remain_stat !== "plenty"
-                    ? "empty"
-                    : remain_stat,
-                distance: getDistance(
-                  { lat, lng },
-                  {
-                    lat: positionInfo.center.getLat(),
-                    lng: positionInfo.center.getLng()
-                  }
-                ),
-                ...extra
-              };
-            })
+            filterStores(result.data.stores)
+              .filter(store => store.lat && store.lng)
+              .map(store => {
+                const { lat, lng, remain_stat, ...extra } = store;
+                console.log(lat, lng);
+                return {
+                  lat,
+                  lng,
+                  remain_stat:
+                    remain_stat !== "empty" &&
+                    remain_stat !== "few" &&
+                    remain_stat !== "some" &&
+                    remain_stat !== "plenty"
+                      ? "empty"
+                      : remain_stat,
+                  distance: getDistance(
+                    { lat, lng },
+                    {
+                      lat: positionInfo.center.getLat(),
+                      lng: positionInfo.center.getLng()
+                    }
+                  ),
+                  ...extra
+                };
+              })
           );
           // DISTANCE 계산
 
