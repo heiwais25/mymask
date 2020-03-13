@@ -4,11 +4,13 @@ import { getLatLngDistance } from "../Components/utils/maps";
 import axios from "axios";
 import moment from "moment";
 import { ILatLng } from "../Components/KakaoMap/types";
-import { TIME_INTERVAL, FETCH_DISTANCE } from "../constants";
+import { TIME_INTERVAL, FETCH_DISTANCE, statusString } from "../constants";
 import { getDistance } from "geolib";
 import { filterStores } from "../storeFilter";
 
-export type IRemainStat = "few" | "empty" | "some" | "plenty";
+export type IRemainStat = "few" | "empty" | "some" | "plenty" | "break";
+
+export type IVisibleRemainStat = "few" | "empty" | "some" | "plenty";
 
 export type IStore = {
   addr: string;
@@ -20,7 +22,9 @@ export type IStore = {
   stock_at: string;
   type: string;
   distance: number;
+  status: string;
   remain_stat: IRemainStat;
+  visible_remain_stat: IVisibleRemainStat;
 };
 
 export type StoreResponseData = {
@@ -31,6 +35,30 @@ export type StoreResponseData = {
 type lastFetchInfo = {
   latlng?: ILatLng;
   time?: Date;
+};
+
+const fillStoreInfo = (store: IStore, center: ILatLng) => {
+  if (!store.remain_stat) {
+    store.remain_stat = "empty";
+  }
+
+  store.status = statusString[store.remain_stat];
+
+  if (store.remain_stat === "break") {
+    store.visible_remain_stat = "empty";
+  } else {
+    store.visible_remain_stat = store.remain_stat;
+  }
+
+  store.distance = getDistance(
+    { lat: store.lat, lng: store.lng },
+    {
+      lat: center.getLat(),
+      lng: center.getLng()
+    }
+  );
+
+  return store;
 };
 
 export default (positionInfo: MapPositionInfo | undefined) => {
@@ -65,26 +93,7 @@ export default (positionInfo: MapPositionInfo | undefined) => {
             filterStores(result.data.stores)
               .filter(store => store.lat && store.lng)
               .map(store => {
-                const { lat, lng, remain_stat, ...extra } = store;
-                return {
-                  lat,
-                  lng,
-                  remain_stat:
-                    remain_stat !== "empty" &&
-                    remain_stat !== "few" &&
-                    remain_stat !== "some" &&
-                    remain_stat !== "plenty"
-                      ? "empty"
-                      : remain_stat,
-                  distance: getDistance(
-                    { lat, lng },
-                    {
-                      lat: positionInfo.center.getLat(),
-                      lng: positionInfo.center.getLng()
-                    }
-                  ),
-                  ...extra
-                };
+                return fillStoreInfo(store, positionInfo.center);
               })
           );
           // DISTANCE 계산

@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "../Styles/index";
 import MarkerIconButton from "./MarkerIconButton";
-import { IRemainStat } from "../hooks/useFetchStores";
-import { statusString, statueColor } from "../constants";
+import { IVisibleRemainStat } from "../hooks/useFetchStores";
+import { statusString, statusColor } from "../constants";
 
 const Container = styled.div`
   ${props => props.theme.topBox};
@@ -21,8 +21,8 @@ const IconButtonGroup = styled.div`
 `;
 
 type Props = {
-  markersVisibility: { [key in IRemainStat]: boolean };
-  toggleFilter: (key: IRemainStat) => void;
+  markersVisibility: { [key in IVisibleRemainStat]: boolean };
+  toggleFilter: (key: IVisibleRemainStat) => void;
 };
 
 export default ({ markersVisibility, toggleFilter }: Props) => {
@@ -32,13 +32,13 @@ export default ({ markersVisibility, toggleFilter }: Props) => {
         <Title>필터</Title>
         <IconButtonGroup>
           {Object.keys(markersVisibility).map(rawKey => {
-            const key = rawKey as IRemainStat;
+            const key = rawKey as IVisibleRemainStat;
             return (
               <MarkerIconButton
                 focused={markersVisibility[key]}
                 key={key}
                 text={statusString[key]}
-                iconColor={statueColor[key]}
+                iconColor={statusColor[key]}
                 onClick={() => toggleFilter(key)}
               />
             );

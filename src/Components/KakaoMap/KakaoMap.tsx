@@ -7,12 +7,12 @@ import useKakaoMap from "../../hooks/useKakaoMap";
 import useKakaoMapBounds from "../../hooks/useKakaoMapPosition";
 import useFetchStores from "../../hooks/useFetchStores";
 import useKakaoMapMarker from "../../hooks/useKakaoMapMarker";
-import { IStore, IRemainStat } from "../../hooks/useFetchStores";
+import { IStore, IVisibleRemainStat } from "../../hooks/useFetchStores";
 import _ from "lodash";
 import StoreListDialog from "../StoreListDialog";
 import { useHistory, useLocation } from "react-router-dom";
 import { useCallback } from "react";
-import { useGeoLocation, revokePermission } from "../../hooks/useGeoLocation";
+import { useGeoLocation } from "../../hooks/useGeoLocation";
 import { isLatLngEqaul } from "../utils/maps";
 import { isMobile } from "react-device-detect";
 import SearchDialog from "../SearchDialog";
@@ -117,12 +117,12 @@ const Map = styled.div`
 `;
 
 type Props = {
-  markersVisibility: { [key in IRemainStat]: boolean };
+  markersVisibility: { [key in IVisibleRemainStat]: boolean };
 };
 
 export default ({ markersVisibility }: Props) => {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [currentMarkers, setCurrentMarkers] = useState<{ [key in IRemainStat]: IMarker[] }>({
+  const [currentMarkers, setCurrentMarkers] = useState<{ [key in IVisibleRemainStat]: IMarker[] }>({
     plenty: [],
     some: [],
     few: [],
@@ -251,7 +251,7 @@ export default ({ markersVisibility }: Props) => {
 
   useEffect(() => {
     Object.keys(markersVisibility).forEach(rawKey => {
-      const key = rawKey as IRemainStat;
+      const key = rawKey as IVisibleRemainStat;
       if (markersVisibility[key]) {
         setMarkersVisible(currentMarkers[key]);
       } else {
@@ -271,12 +271,12 @@ export default ({ markersVisibility }: Props) => {
         detailDialogOpen={detailDialogOpen}
         selectedStore={selectedStore}
         loading={loading}
-        hasItem={stores.filter(store => markersVisibility[store.remain_stat]).length > 0}
+        hasItem={stores.filter(store => markersVisibility[store.visible_remain_stat]).length > 0}
         moveToCurrentLocation={moveToCurrentLocation}
         isCurrentLocation={isCurrentLocation}
       />
       <StoreListDialog
-        stores={stores.filter(store => markersVisibility[store.remain_stat])}
+        stores={stores.filter(store => markersVisibility[store.visible_remain_stat])}
         handleItemClick={moveToStore}
       />
       <SearchDialog handleItemClick={moveToLatLng} />

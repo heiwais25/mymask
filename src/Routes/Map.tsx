@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "../Styles/index";
 import KakaoMap from "../Components/KakaoMap/KakaoMap";
 import TopFilters from "../Components/TopFilters";
-import { IRemainStat } from "../hooks/useFetchStores";
+import { IVisibleRemainStat } from "../hooks/useFetchStores";
 
 const Container = styled.div`
   position: relative;
@@ -24,14 +24,16 @@ const MapBox = styled.div`
 `;
 
 export default () => {
-  const [markersVisibility, setMarkersVisibility] = useState<{ [key in IRemainStat]: boolean }>({
+  const [markersVisibility, setMarkersVisibility] = useState<
+    { [key in IVisibleRemainStat]: boolean }
+  >({
     plenty: true,
     some: true,
     few: true,
     empty: true
   });
 
-  const toggleFilter = (key: IRemainStat) => {
+  const toggleFilter = (key: IVisibleRemainStat) => {
     const current = markersVisibility[key];
     setMarkersVisibility({
       ...markersVisibility,

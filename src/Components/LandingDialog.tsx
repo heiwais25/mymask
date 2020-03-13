@@ -61,7 +61,11 @@ const GreyIcon = styled(Icon)`
   background-size: cover;
 `;
 
-const IconText = styled.div``;
+const IconText = styled.div`
+  :not(:last-child) {
+    padding-bottom: 4px;
+  }
+`;
 
 const RedText = styled.span`
   color: ${props => props.theme.redColor};
@@ -74,8 +78,7 @@ export default function LandingDialog({ open, handleClose }: Props) {
       </MuiDialogTitle>
       <DialogContent dividers>
         <Typography gutterBottom variant="body2">
-          서비 이용에 불편을 드려 죄송합니다. 본 서비스는 정부 공공 마스크 재고 정보 API를 이용하고
-          있습니다. 현재 약국, 우체국
+          본 서비스는 정부 공공 마스크 재고 정보 API를 이용하고 있습니다.
         </Typography>
         <Typography gutterBottom variant="body2">
           빠른 시일 내에 알림 추가, 어플리케이션이 제작될 예정입니다. 더 좋은 서비스를 제공하기 위해
@@ -92,13 +95,9 @@ export default function LandingDialog({ open, handleClose }: Props) {
           <RedText>업데이트</RedText>
         </Typography>
         <Typography variant="body2">
-          1. 원하는 장소를 검색할 수 있는 기능이 추가되었습니다.
+          1. "판매중지" 상태가 추가되었습니다. 약사분들께서 일시적으로 설정하시는 것으로 가능하실 때
+          다시 상태를 해제하신다고 합니다.
         </Typography>
-        <Typography variant="body2">2. 필터 기능이 추가되었습니다.</Typography>
-        <Typography variant="body2" gutterBottom>
-          2. 전체 목록을 볼 수 있는 버튼이 추가되었습니다.
-        </Typography>
-
         <Typography gutterBottom variant="body1" color="secondary">
           <RedText>유의사항</RedText>
         </Typography>
@@ -113,6 +112,7 @@ export default function LandingDialog({ open, handleClose }: Props) {
           <IconBox>
             <GreyIcon />
             <IconText>0 ~ 1개</IconText>
+            <IconText>판매중지</IconText>
           </IconBox>
           <IconBox>
             <YellowIcon />
