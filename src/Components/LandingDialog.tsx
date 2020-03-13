@@ -66,7 +66,6 @@ const IconText = styled.div``;
 const RedText = styled.span`
   color: ${props => props.theme.redColor};
 `;
-
 export default function LandingDialog({ open, handleClose }: Props) {
   return (
     <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
@@ -75,7 +74,8 @@ export default function LandingDialog({ open, handleClose }: Props) {
       </MuiDialogTitle>
       <DialogContent dividers>
         <Typography gutterBottom variant="body2">
-          본 서비스는 정부 공공 마스크 재고 정보 API를 이용하고 있습니다.
+          서비 이용에 불편을 드려 죄송합니다. 본 서비스는 정부 공공 마스크 재고 정보 API를 이용하고
+          있습니다. 현재 약국, 우체국
         </Typography>
         <Typography gutterBottom variant="body2">
           빠른 시일 내에 알림 추가, 어플리케이션이 제작될 예정입니다. 더 좋은 서비스를 제공하기 위해

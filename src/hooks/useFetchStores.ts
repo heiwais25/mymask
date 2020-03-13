@@ -68,7 +68,13 @@ export default (positionInfo: MapPositionInfo | undefined) => {
               return {
                 lat,
                 lng,
-                remain_stat: remain_stat ? remain_stat : "empty",
+                remain_stat:
+                  remain_stat !== "empty" &&
+                  remain_stat !== "few" &&
+                  remain_stat !== "some" &&
+                  remain_stat !== "plenty"
+                    ? "empty"
+                    : remain_stat,
                 distance: getDistance(
                   { lat, lng },
                   {
