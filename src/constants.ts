@@ -11,8 +11,8 @@ export const FETCH_DISTANCE = 1500; // in minute
 
 export const version = "v0.0.5";
 export const updateDate = moment("2020-03-14T04:00:00Z").toDate();
-export const NOTICE_CHECK_TOKEN = `${version}/notice-check`;
-export const NOTICE_CHECK_KEY = "notice-check-key";
+export const NOTICE_CHECK_TOKEN = `${version}/dialog-check`;
+export const NOTICE_CHECK_KEY = "dialog-check-key";
 
 export const statusString: { [key in IRemainStat]: string } = {
   plenty: "충분",
