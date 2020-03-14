@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "../Styles/index";
 import moment from "moment";
-import { Finder } from "../Icons";
+import { Finder, Menu } from "../Icons";
 import { useHistory } from "react-router-dom";
 import { SEARCH_DIALOG } from "../constants";
+import Drawer from "./Drawer";
 
 const Container = styled.div`
   ${props => props.theme.topBox};
@@ -16,14 +17,15 @@ const Container = styled.div`
 
 const Col = styled.div`
   display: flex;
-  flex-direction: column;
 `;
 
 const ColItem = styled.div`
   :not(:last-child) {
-    padding-right: 10px;
+    padding-right: 8px;
   }
   font-size: 12px;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Title = styled(ColItem)`
@@ -39,20 +41,24 @@ const SubBold = styled.span`
   font-weight: 600;
 `;
 
+const SubTitle = styled.div``;
+
 const IconButton = styled.div`
+  ${props => props.theme.buttonBase}
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
   height: 100%;
   border-radius: 50%;
-  padding: 6px;
+  padding: 4px;
 `;
 
 const maskRotation = ["전체", "1, 6", "2, 7", "3, 8", "4, 9", "5, 0", "전체"];
 
 export default () => {
   const history = useHistory();
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const onSearchClick = () => {
     history.push({
@@ -64,11 +70,19 @@ export default () => {
     <Container>
       <>
         <Col>
-          <Title>
-            <Bold>마이마스크</Bold>
-          </Title>
           <ColItem>
-            오늘의 마스크 5부제 <SubBold>(출생연도 끝자리 {maskRotation[moment().days()]})</SubBold>
+            <IconButton onClick={() => setDrawerOpen(true)}>
+              <Menu size={20} />
+            </IconButton>
+          </ColItem>
+          <ColItem>
+            <Title>
+              <Bold>마이마스크</Bold>
+            </Title>
+            <SubTitle>
+              오늘의 마스크 5부제{" "}
+              <SubBold>(출생연도 끝자리 {maskRotation[moment().days()]})</SubBold>
+            </SubTitle>
           </ColItem>
         </Col>
         <Col>
@@ -77,6 +91,8 @@ export default () => {
           </IconButton>
         </Col>
       </>
+
+      <Drawer open={drawerOpen} setDrawerOpen={setDrawerOpen} />
     </Container>
   );
 };

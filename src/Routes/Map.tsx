@@ -3,6 +3,7 @@ import styled from "../Styles/index";
 import KakaoMap from "../Components/KakaoMap/KakaoMap";
 import TopFilters from "../Components/TopFilters";
 import { IVisibleRemainStat } from "../hooks/useFetchStores";
+import LandingDialog from "../Components/LandingDialog";
 
 const Container = styled.div`
   position: relative;
@@ -47,6 +48,7 @@ export default () => {
       <MapBox>
         <KakaoMap markersVisibility={markersVisibility} />
       </MapBox>
+      <LandingDialog />
     </Container>
   );
 };

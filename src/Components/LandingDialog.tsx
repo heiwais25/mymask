@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Theme, withStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
 import MuiDialogContent from "@material-ui/core/DialogContent";
 import Typography from "@material-ui/core/Typography";
 import MuiDialogTitle from "../Components/MuiDialogTitle";
 import styled from "../Styles/index";
+import { useLocation, useHistory } from "react-router-dom";
+import {
+  NOTICE_DIALOG,
+  NOTICE_CHECK_KEY,
+  NOTICE_CHECK_TOKEN,
+  version,
+  updateDate
+} from "../constants";
+import moment from "moment";
 
 const DialogContent = withStyles((theme: Theme) => ({
   root: {
@@ -70,7 +79,33 @@ const IconText = styled.div`
 const RedText = styled.span`
   color: ${props => props.theme.redColor};
 `;
-export default function LandingDialog({ open, handleClose }: Props) {
+export default function LandingDialog() {
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
+  const history = useHistory();
+  console.log(location);
+  useEffect(() => {
+    const checkToken = localStorage.getItem(NOTICE_CHECK_KEY);
+    if (!checkToken || checkToken !== NOTICE_CHECK_TOKEN) {
+      setOpen(true);
+      return;
+    }
+    // 맨 처음에 입장했을 때,
+    if (location.hash === NOTICE_DIALOG) {
+      setOpen(true);
+    } else {
+      setOpen(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.hash]);
+
+  const handleClose = () => {
+    localStorage.setItem(NOTICE_CHECK_KEY, NOTICE_CHECK_TOKEN);
+    if (location.hash === NOTICE_DIALOG) {
+      history.goBack();
+    }
+  };
+
   return (
     <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
       <MuiDialogTitle id="customized-dialog-title" onClose={handleClose}>
@@ -95,8 +130,11 @@ export default function LandingDialog({ open, handleClose }: Props) {
           <RedText>업데이트</RedText>
         </Typography>
         <Typography variant="body2">
-          1. "판매중지" 상태가 추가되었습니다. 약사분들께서 일시적으로 설정하시는 것으로 가능하실 때
-          다시 상태를 해제하신다고 합니다.
+          1. 메뉴 창에서 "제보하기" 기능이 추가되었습니다. 필요하신 기능이나 불만 사항을 편하게
+          말씀해주시면 빠른 시일 내에 개선하겠습니다.
+        </Typography>
+        <Typography variant="body2">
+          2. 하나로 마트 정보도 들어오기 시작했습니다. 많은 이용 바랍니다.
         </Typography>
         <Typography gutterBottom variant="body1" color="secondary">
           <RedText>유의사항</RedText>
@@ -106,7 +144,7 @@ export default function LandingDialog({ open, handleClose }: Props) {
           2. 3월 15일까지 정부 데이터 공개는 베타서비스 중으로 실수량과 일부 차이가 있을 수 있습니다
         </Typography>
         <Typography gutterBottom variant="body2">
-          3. 마스크 재고는 구체적인 수치가 공개되지 않으며 다음 4개의 구간으로 나타납니다.
+          3. 마스크 재고는 다음 4개의 구간으로 나타납니다.
         </Typography>
         <BottomIcons>
           <IconBox>
@@ -128,7 +166,10 @@ export default function LandingDialog({ open, handleClose }: Props) {
           </IconBox>
         </BottomIcons>
         <Typography gutterBottom variant="body2">
-          마이마스크 (My Mask)
+          {moment(updateDate).format("LLLL")}
+        </Typography>
+        <Typography gutterBottom variant="body2">
+          마이마스크
         </Typography>
         <Typography gutterBottom variant="body2">
           개발자 : 김종현 (jongkoo25@gmail.com)

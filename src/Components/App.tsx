@@ -2,14 +2,14 @@ import React, { useState, useEffect } from "react";
 import { ThemeProvider } from "styled-components";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, useLocation } from "react-router-dom";
 import GlobalStyles from "../Styles/GlobalStyles";
 import Theme from "../Styles/Theme";
 import Router from "./Router";
 import { ThemeProvider as MaterialThemeProvider } from "@material-ui/core";
 import { materialTheme } from "../Styles/MaterialTheme";
 import LandingDialog from "./LandingDialog";
-import { DIALOG_CHECK_KEY, DIALOG_CHECK_TOKEN } from "../constants";
+import { NOTICE_CHECK_KEY, NOTICE_CHECK_TOKEN } from "../constants";
 import moment from "moment";
 
 export default () => {
@@ -17,8 +17,8 @@ export default () => {
 
   const [open, setOpen] = useState(false);
   useEffect(() => {
-    const checkToken = localStorage.getItem(DIALOG_CHECK_KEY);
-    if (!checkToken || checkToken !== DIALOG_CHECK_TOKEN) {
+    const checkToken = localStorage.getItem(NOTICE_CHECK_KEY);
+    if (!checkToken || checkToken !== NOTICE_CHECK_TOKEN) {
       setOpen(true);
     }
   }, []);
@@ -29,7 +29,7 @@ export default () => {
     }
 
     setOpen(false);
-    localStorage.setItem(DIALOG_CHECK_KEY, DIALOG_CHECK_TOKEN);
+    localStorage.setItem(NOTICE_CHECK_KEY, NOTICE_CHECK_TOKEN);
   };
 
   return (
@@ -41,7 +41,6 @@ export default () => {
           {/* <Footer /> */}
         </BrowserRouter>
         <ToastContainer position={toast.POSITION.BOTTOM_LEFT} />
-        <LandingDialog open={open} handleClose={handleDialogClose} />
       </ThemeProvider>
     </MaterialThemeProvider>
   );

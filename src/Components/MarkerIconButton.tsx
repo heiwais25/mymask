@@ -7,7 +7,8 @@ type FilterButtonProps = {
 };
 
 const FilterButton = styled.div<FilterButtonProps>`
-  ${props => props.theme.unselectableText}
+  ${props => props.theme.unselectableText};
+  ${props => props.theme.buttonBase};
   cursor: pointer;
   border-radius: 10px;
   display: flex;

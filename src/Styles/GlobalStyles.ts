@@ -24,7 +24,12 @@ export default createGlobalStyle`
     a {
         color:${props => props.theme.blueColor};
         text-decoration:none;
+        outline: none !important;
     }
+    svg {
+        user-select: none;
+    }
+
     input:focus{
         outline:none;
     }

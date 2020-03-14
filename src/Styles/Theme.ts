@@ -10,6 +10,12 @@ const WHITE_BOX = `
 `;
 
 const theme = {
+  buttonBase: `
+    cursor: pointer;
+    -webkit-appearance: none;
+    -webkit-tap-highlight-color: transparent;
+  `,
+
   markerGreenColor: "#27ae60",
   markerYelloColor: "#f39c12",
   markerRedColor: "#e74c3c",
@@ -45,7 +51,7 @@ const theme = {
   background-color: #fff;
   display: flex;
   box-shadow: 0 3px 3px 0px rgba(0, 0, 0, 0.19);
-  padding: 0px 15px;  
+  padding: 0px 10px;  
   `,
 
   unselectableText: `
