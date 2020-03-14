@@ -169,7 +169,7 @@ export default ({
 }: Props) => {
   return (
     <>
-      {!geoGranted && (
+      {geoGranted && (
         <RightSideButtons>
           <IconButton onClick={moveToCurrentLocation} data-focused={isCurrentLocation}>
             <Location size={24} />
