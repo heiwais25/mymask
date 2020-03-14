@@ -103,6 +103,8 @@ export default function LandingDialog() {
     localStorage.setItem(NOTICE_CHECK_KEY, NOTICE_CHECK_TOKEN);
     if (location.hash === NOTICE_DIALOG) {
       history.goBack();
+    } else {
+      setOpen(false);
     }
   };
 
