@@ -74,7 +74,7 @@ export default (positionInfo: MapPositionInfo | undefined) => {
         lastFetchInfo.time &&
         currentFetchTime.isBefore(moment(lastFetchInfo.time).add(TIME_INTERVAL, "m")) &&
         lastFetchInfo.latlng &&
-        getLatLngDistance(positionInfo.center, lastFetchInfo.latlng) < FETCH_DISTANCE
+        getLatLngDistance(positionInfo.center, lastFetchInfo.latlng) < FETCH_DISTANCE * 0.7
       ) {
         return;
       }
@@ -85,10 +85,16 @@ export default (positionInfo: MapPositionInfo | undefined) => {
           params: {
             lat: positionInfo.center.getLat(),
             lng: positionInfo.center.getLng(),
-            m: FETCH_DISTANCE * 1.5
+            m: FETCH_DISTANCE
           }
         })
         .then(result => {
+          // DISTANCE 계산
+          setLastFetchInfo({
+            latlng: positionInfo.center,
+            time: currentFetchTime.toDate()
+          });
+
           setStores(
             filterStores(result.data.stores)
               .filter(store => store.lat && store.lng)
@@ -96,12 +102,6 @@ export default (positionInfo: MapPositionInfo | undefined) => {
                 return fillStoreInfo(store, positionInfo.center);
               })
           );
-          // DISTANCE 계산
-
-          setLastFetchInfo({
-            latlng: positionInfo.center,
-            time: currentFetchTime.toDate()
-          });
         })
         .finally(() => {
           setLoading(false);
@@ -114,5 +114,5 @@ export default (positionInfo: MapPositionInfo | undefined) => {
     setStores([]);
   }, []);
 
-  return { stores, setStores, clearStores, loading };
+  return { stores, lastFetchInfo, setStores, clearStores, loading };
 };

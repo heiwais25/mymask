@@ -11,6 +11,7 @@ import { materialTheme } from "../Styles/MaterialTheme";
 import LandingDialog from "./LandingDialog";
 import { NOTICE_CHECK_KEY, NOTICE_CHECK_TOKEN } from "../constants";
 import moment from "moment";
+import "moment/locale/ko";
 
 export default () => {
   const dueDate = moment("2020-03-10T23:00:00Z").toDate();

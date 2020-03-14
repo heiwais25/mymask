@@ -36,79 +36,114 @@ const Container = styled.div`
     line-height: 1.1;
     width: 260px;
     padding: 5px;
-    display: flex;
     background-color: white;
     border-radius: 8px;
     padding: 12px;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
     font-size: 12px;
-  }
-
-  .custom_window .distance {
-    color: ${props => props.theme.darkGreyColor};
-    padding-left: 4px;
-  }
-
-  .custom_window .plenty {
-    color: ${props => props.theme.greenColor};
-  }
-
-  .custom_window .some {
-    color: ${props => props.theme.yellowColor};
-  }
-
-  .custom_window .few {
-    color: ${props => props.theme.redColor};
-  }
-
-  .custom_window .empty {
-    color: ${props => props.theme.greyColor};
-  }
-
-  .custom_window:after {
-    content: "";
-    position: absolute;
-    margin-left: -12px;
-    left: 50%;
-    bottom: -10px;
-    width: 22px;
-    height: 12px;
-    background: url("/images/vertex_white.png");
-  }
-
-  .custom_window span {
     white-space: nowrap;
-  }
-
-  .custom_window ._window_col {
     display: flex;
     flex-direction: column;
-    padding-right: 12px;
-  }
 
-  .custom_window ._window_col:nth-child(2) {
-    display: flex;
-    flex-direction: column;
-    padding: 0;
-  }
+    .rows {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      :not(:last-child) {
+        padding-bottom: 8px;
+      }
+    }
 
-  .custom_window ._window_col div {
-    white-space: nowrap;
-    padding-bottom: 4px;
-  }
-
-  .custom_window ._stock span {
-    white-space: nowrap;
-    :not(:last-child) {
+    ._window_title {
+      font-size: 14px;
+      font-weight: 600;
       padding-bottom: 4px;
     }
-    text-align: center;
-  }
 
-  .custom_window ._window_title {
-    font-size: 14px;
-    font-weight: 600;
-    padding-bottom: 6px;
+    ._window_col:first-child {
+      display: flex;
+      flex-direction: column;
+      padding-right: 12px;
+      max-width: 200px;
+    }
+
+    ._window_col:nth-child(2) {
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      width: 40px;
+    }
+
+    ._row {
+      width: 100%;
+      white-space: normal;
+      :not(:last-child) {
+        padding-bottom: 4px;
+      }
+    }
+
+    .linkBox {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding: 4px;
+      border-radius: 4px;
+      border: 1px solid ${props => props.theme.blueColor} !important;
+
+      a {
+        display: block;
+        width: 100%;
+        text-align: center;
+        text-decoration: none;
+        color: ${props => props.theme.blueColor};
+      }
+    }
+
+    .address {
+      line-height: 1.2;
+    }
+
+    .distance {
+      color: ${props => props.theme.darkGreyColor};
+      padding-left: 4px;
+    }
+
+    ._stock span {
+      white-space: normal;
+      line-height: 1.2;
+      word-break: break-all;
+      :not(:last-child) {
+        padding-bottom: 4px;
+      }
+      text-align: center;
+    }
+
+    span.plenty {
+      color: ${props => props.theme.greenColor};
+    }
+
+    span.some {
+      color: ${props => props.theme.yellowColor};
+    }
+
+    span.few {
+      color: ${props => props.theme.redColor};
+    }
+
+    span.empty {
+      color: ${props => props.theme.greyColor};
+    }
+
+    :after {
+      content: "";
+      position: absolute;
+      margin-left: -12px;
+      left: 50%;
+      bottom: -10px;
+      width: 22px;
+      height: 12px;
+      background: url("/images/vertex_white.png");
+    }
   }
 `;
 
@@ -158,12 +193,12 @@ export default ({ markersVisibility }: Props) => {
     [history]
   );
 
+  const { stores, lastFetchInfo, loading } = useFetchStores(positions);
   const { addMarker, setMarkersHidden, setMarkersVisible } = useKakaoMapMarker({
     map,
     clusterMinLevel: isMobile ? 5 : 4,
     onClick: selectStoreInMap
   });
-  const { stores, loading } = useFetchStores(positions);
 
   useEffect(() => {
     if (map) {
@@ -186,7 +221,12 @@ export default ({ markersVisibility }: Props) => {
     let newStores: IStore[] = [];
     if (stores) {
       newStores = _.uniqBy(stores, "code");
-      const { markers, overlays } = addMarker(currentMarkers, newStores, markersVisibility);
+      const { markers, overlays } = addMarker(
+        currentMarkers,
+        newStores,
+        markersVisibility,
+        lastFetchInfo.latlng
+      );
       setCurrentMarkers(markers);
       setOverlays(overlays);
     }
@@ -249,6 +289,14 @@ export default ({ markersVisibility }: Props) => {
     overlays.forEach(overlay => overlay.setMap(null));
   };
 
+  const changeZoom = (direction: boolean) => {
+    overlays.forEach(overlay => overlay.setMap(null));
+    if (map) {
+      const zoomChange = direction ? -1 : 1;
+      map.setLevel(map.getLevel() + zoomChange);
+    }
+  };
+
   useEffect(() => {
     Object.keys(markersVisibility).forEach(rawKey => {
       const key = rawKey as IVisibleRemainStat;
@@ -274,6 +322,7 @@ export default ({ markersVisibility }: Props) => {
         hasItem={stores.filter(store => markersVisibility[store.visible_remain_stat]).length > 0}
         moveToCurrentLocation={moveToCurrentLocation}
         isCurrentLocation={isCurrentLocation}
+        changeZoom={changeZoom}
       />
       <StoreListDialog
         stores={stores.filter(store => markersVisibility[store.visible_remain_stat])}

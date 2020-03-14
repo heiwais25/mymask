@@ -7,10 +7,10 @@ export const SEARCH_DIALOG = "#SEARCH_DIALOG";
 export const NOTICE_DIALOG = "#NOTICE_DIALOG";
 
 export const TIME_INTERVAL = 2; // in minute
-export const FETCH_DISTANCE = 1500; // in minute
+export const FETCH_DISTANCE = 2000; // in minute
 
-export const version = "v0.0.5";
-export const updateDate = moment("2020-03-14T04:00:00Z").toDate();
+export const version = "v0.0.6";
+export const updateDate = moment("2020-03-14T16:00:00Z").toDate();
 export const NOTICE_CHECK_TOKEN = `${version}/dialog-check`;
 export const NOTICE_CHECK_KEY = "dialog-check-key";
 
@@ -19,7 +19,7 @@ export const statusString: { [key in IRemainStat]: string } = {
   some: "보통",
   few: "부족",
   empty: "없음",
-  break: "판매중지"
+  break: "판매 중지"
 };
 
 export type IMarkerColor = "green" | "yellow" | "red" | "grey";
@@ -36,4 +36,11 @@ export const rangeString: { [key in IVisibleRemainStat]: string } = {
   some: "30 ~ 99개",
   few: "2 ~ 29개",
   empty: "0 ~ 1개"
+};
+
+export const markerIcon: { [key in IVisibleRemainStat]: string } = {
+  plenty: "/images/marker-green.png",
+  some: "/images/marker-yellow.png",
+  few: "/images/marker-red.png",
+  empty: "/images/marker-grey.png"
 };

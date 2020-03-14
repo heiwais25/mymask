@@ -82,6 +82,20 @@ export type IKakaoMap = {
       minClusterSize?: number;
     }): IMarkerClusterer;
   };
+  Circle: {
+    new (option: {
+      map?: IMap;
+      center: ILatLng;
+      radius: number;
+      strokeWeight: number;
+      strokeColor: string;
+      strokeOpacity: number;
+      strokeStyle: string;
+      fillColor: string;
+      fillOpacity: number;
+    }): ICircle;
+  };
+
   event: {
     addListener: (
       map: IMap | ICustomOverlay | IMarker,
@@ -266,4 +280,13 @@ export type IMarkerClusterer = {
   setMinLevel: (level: number) => void;
   getTexts: () => string;
   setTexts: (text: string) => void;
+};
+
+export type ICircle = {
+  setMap: (map: IMap | null) => void;
+  getMap: () => IMap;
+  setPosition: (latLng: ILatLng) => void;
+  getPosition: () => ILatLng;
+  setRadius: (radius: number) => void;
+  getRadius: () => number;
 };

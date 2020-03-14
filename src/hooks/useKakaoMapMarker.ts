@@ -1,11 +1,11 @@
 import { useCallback, useState, useEffect } from "react";
 import { IStore, IVisibleRemainStat } from "./useFetchStores";
-import { IMarker, ICustomOverlay } from "../Components/KakaoMap/types";
+import { IMarker, ICustomOverlay, ILatLng, ICircle } from "../Components/KakaoMap/types";
 import { IMap, IMarkerClusterer } from "../Components/KakaoMap/types";
 import _ from "lodash";
-import "moment/locale/ko";
-import moment from "moment";
-import { statusString, rangeString } from "../constants";
+import { getInfoWindow } from "../Components/utils/maps";
+import { markerIcon, FETCH_DISTANCE } from "../constants";
+import theme from "../Styles/Theme";
 
 type Params = {
   map: IMap | undefined;
@@ -13,45 +13,10 @@ type Params = {
   onClick?: (store: IStore) => void;
 };
 
-const markerIcon: { [key in IVisibleRemainStat]: string } = {
-  plenty: "/images/marker-green.png",
-  some: "/images/marker-yellow.png",
-  few: "/images/marker-red.png",
-  empty: "/images/marker-grey.png"
-};
-
-const getInfoWindow = (store: IStore) => `
-<div class="custom_window">
-  <div class="_window_col">
-    <div style="display:flex; align-items:center">
-      <div class="_window_title">${store.name}</div>
-      <span class="distance">${store.distance} m</span>
-    </div>
-    <div style="white-space:normal; line-height: 1.3;">${store.addr}</div>
-    <div>
-      입고시간 : ${!!store.stock_at ? moment(new Date(store.stock_at)).fromNow() : "확인중"}
-    </div>
-    <div>
-      업데이트 : ${!!store.created_at ? moment(new Date(store.created_at)).fromNow() : "확인중"}
-    </div>
-  </div>
-  <div class="_window_col _stock" style="justify-content: center; align-items: center; display: ;">
-    <span style="text-align: center; font-size: 14px;"> 재고수 </span>
-    <span class="${store.remain_stat}" style="font-size: 20px;">
-      ${statusString[store.remain_stat]}
-    </span>
-    ${
-      store.remain_stat !== "break"
-        ? `<span style="text-align: center;"> ${rangeString[store.visible_remain_stat]} </span>`
-        : ""
-    }
-  </div>
-</div>
-  `;
-
 export default ({ map, clusterMinLevel = 7, onClick = (store: IStore) => null }: Params) => {
   const [clusterer, setClusterer] = useState<IMarkerClusterer>();
   const [overlays, setOverlays] = useState<ICustomOverlay[]>([]);
+  const circles: ICircle[] = [];
 
   useEffect(() => {
     if (map) {
@@ -79,8 +44,26 @@ export default ({ map, clusterMinLevel = 7, onClick = (store: IStore) => null }:
     (
       oldMarkers: { [key in IVisibleRemainStat]: IMarker[] },
       newStores: IStore[],
-      filterState?: { [key in IVisibleRemainStat]: boolean }
+      filterState?: { [key in IVisibleRemainStat]: boolean },
+      lastFetchLatLng?: ILatLng
     ) => {
+      if (map && lastFetchLatLng) {
+        circles.forEach(circle => circle.setMap(null));
+
+        const circle = new window.kakao.maps.Circle({
+          center: lastFetchLatLng, // 원의 중심좌표 입니다
+          radius: FETCH_DISTANCE, // 미터 단위의 원의 반지름입니다
+          strokeWeight: 1, // 선의 두께입니다
+          strokeColor: theme.darkGreyColor, // 선의 색깔입니다
+          strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+          strokeStyle: "solid", // 선의 스타일 입니다
+          fillColor: theme.lightPrimaryColor, // 채우기 색깔입니다
+          fillOpacity: 0.3 // 채우기 불투명도 입니다
+        });
+        circle.setMap(map);
+        circles.push(circle);
+      }
+
       const newMarkers: { [key in IVisibleRemainStat]: IMarker[] } = {
         plenty: [],
         some: [],

@@ -86,3 +86,27 @@ export const Notice = ({ size = 24, color = "white" }) => (
     <path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm1 18h-2v-8h2v8zm-1-12.25c.69 0 1.25.56 1.25 1.25s-.56 1.25-1.25 1.25-1.25-.56-1.25-1.25.56-1.25 1.25-1.25z" />
   </svg>
 );
+
+export const Plus = ({ size = 24, color = "white" }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    fill={color}
+    viewBox="0 0 24 24"
+  >
+    <path d="M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z" />
+  </svg>
+);
+
+export const Minus = ({ size = 24, color = "white" }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    fill={color}
+    viewBox="0 0 24 24"
+  >
+    <path d="M0 10h24v4h-24z" />
+  </svg>
+);

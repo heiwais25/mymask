@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "../Styles/index";
-import { Location, UpArrow } from "../Icons";
+import { Location, UpArrow, Plus, Minus } from "../Icons";
 import { IStore } from "../hooks/useFetchStores";
 import Loader from "./Loader";
 import { isMobile } from "react-device-detect";
@@ -17,6 +17,7 @@ type IconButtonProps = {
 };
 
 const IconButton = styled.div<IconButtonProps>`
+  ${props => props.theme.buttonBase};
   svg {
     fill: ${props => (props["data-focused"] ? "white !important" : props.theme.darkGreyColor)};
   }
@@ -91,6 +92,42 @@ const BottomSign = styled.div`
   align-items: flex-end;
 `;
 
+const ZoomBox = styled.div`
+  position: absolute;
+  right: ${props => props.theme.mapActionPadding};
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  width: 40px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+`;
+
+const ZoomButton = styled.div`
+  ${props => props.theme.buttonBase};
+  width: 100%;
+  height: 40px;
+  display: flex;
+  flex-direction: center;
+  align-items: center;
+  padding: 8px;
+  :not(:last-child) {
+    border-bottom: 1px solid ${props => props.theme.lightGreyColor} !important;
+  }
+`;
+
+const ZoomIcon = styled.div`
+  display: flex;
+  flex-direction: center;
+  align-items: center;
+  text-align: center;
+  display: block;
+  width: 100%;
+`;
+
 // const BottomLeft = styled.div`
 //   position: absolute;
 //   bottom: ${props => props.theme.mapActionPadding};
@@ -116,6 +153,7 @@ type Props = {
   openListDialog: () => void;
   moveToCurrentLocation: () => void;
   isCurrentLocation?: boolean;
+  changeZoom: (direction: boolean) => void;
 };
 
 export default ({
@@ -125,12 +163,13 @@ export default ({
   openListDialog,
   loading,
   hasItem,
+  changeZoom,
   moveToCurrentLocation,
   isCurrentLocation = false
 }: Props) => {
   return (
     <>
-      {geoGranted && (
+      {!geoGranted && (
         <RightSideButtons>
           <IconButton onClick={moveToCurrentLocation} data-focused={isCurrentLocation}>
             <Location size={24} />
@@ -141,11 +180,19 @@ export default ({
         <MeInfo>김종현</MeInfo>
         <MeInfo>jongkoo25@gmail.com</MeInfo>
       </BottomSign>
-      {/* <BottomLeft>
-        <IconButton onClick={() => window.open("mailto:jongkoo25@gmail.com?subject=제안하기")}>
-          <Mail size={24} />
-        </IconButton>
-      </BottomLeft> */}
+
+      <ZoomBox>
+        <ZoomButton onClick={() => changeZoom(true)}>
+          <ZoomIcon>
+            <Plus size={16} />
+          </ZoomIcon>
+        </ZoomButton>
+        <ZoomButton onClick={() => changeZoom(false)}>
+          <ZoomIcon>
+            <Minus size={16} />
+          </ZoomIcon>
+        </ZoomButton>
+      </ZoomBox>
 
       {!loading && (
         <BottomSideButtons>

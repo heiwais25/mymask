@@ -43,7 +43,7 @@ const theme = {
   blueColor: "#3498db",
 
   primaryColor: "#2980b9",
-  lightPrimaryColor: "#5B99DD",
+  lightPrimaryColor: "#d8ebff",
 
   topBox: `
   z-index: 5;
@@ -70,7 +70,7 @@ const theme = {
 
   borderGreyColor: "#cacaca",
 
-  lightGreyColor: "#ecf0f1",
+  lightGreyColor: "#cfd4d5",
 
   redFocusedColor: "#d8665c",
   blueFocuesdColor: "#127965",
