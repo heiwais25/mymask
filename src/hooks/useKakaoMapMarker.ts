@@ -103,7 +103,7 @@ export default ({ map, clusterMinLevel = 7, onClick = (store: IStore) => null }:
             content: getInfoWindow(store),
             clickable: true,
             xAnchor: 0.5,
-            yAnchor: 1.5,
+            yAnchor: 1.35,
             zIndex: 999
           });
           testInfos.push(customOverlay);
