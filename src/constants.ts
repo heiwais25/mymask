@@ -1,5 +1,6 @@
 import { IRemainStat, IVisibleRemainStat } from "./hooks/useFetchStores";
 import moment from "moment";
+import { isMobile } from "react-device-detect";
 
 export const STORE_LIST_DIALOG = "#STORE_LIST_DIALOG";
 export const STORE_DETAIL_DIALOG = "#STORE_DETAIL_DIALOG";
@@ -9,10 +10,13 @@ export const NOTICE_DIALOG = "#NOTICE_DIALOG";
 export const TIME_INTERVAL = 2; // in minute
 export const FETCH_DISTANCE = 2000; // in minute
 
-export const version = "v0.0.6";
-export const updateDate = moment("2020-03-14T16:00:00Z").toDate();
+export const version = "v0.0.7";
+export const updateDate = moment("2020-03-15T16:00:00Z").toDate();
 export const NOTICE_CHECK_TOKEN = `${version}/dialog-check`;
 export const NOTICE_CHECK_KEY = "dialog-check-key";
+
+export const DEFAULT_ZOOM_LEVEL = isMobile ? 4 : 3;
+export const CLUSTER_MIN_LEVEL = isMobile ? 5 : 4;
 
 export const statusString: { [key in IRemainStat]: string } = {
   plenty: "충분",

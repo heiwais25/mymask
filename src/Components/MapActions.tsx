@@ -1,7 +1,6 @@
 import React from "react";
 import styled from "../Styles/index";
 import { Location, UpArrow, Plus, Minus } from "../Icons";
-import { IStore } from "../hooks/useFetchStores";
 import Loader from "./Loader";
 import { isMobile } from "react-device-detect";
 
@@ -142,14 +141,10 @@ const MeInfo = styled.span`
   }
 `;
 
-const DetailInfoBox = styled.div``;
-
 type Props = {
   geoGranted: boolean;
   hasItem: boolean;
   loading: boolean;
-  selectedStore?: IStore;
-  detailDialogOpen?: boolean;
   openListDialog: () => void;
   moveToCurrentLocation: () => void;
   isCurrentLocation?: boolean;
@@ -158,8 +153,6 @@ type Props = {
 
 export default ({
   geoGranted,
-  selectedStore,
-  detailDialogOpen = false,
   openListDialog,
   loading,
   hasItem,
@@ -200,7 +193,6 @@ export default ({
             <ButtonText>{hasItem ? "목록 보기" : "지도를 움직여보세요"}</ButtonText>
             {hasItem && isMobile && <UpArrow size={12} />}
           </ListViewButton>
-          {selectedStore && detailDialogOpen && <DetailInfoBox />}
         </BottomSideButtons>
       )}
       {loading && (

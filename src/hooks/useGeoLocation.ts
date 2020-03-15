@@ -20,17 +20,3 @@ export const useGeoLocation = () => {
     );
   }, []);
 };
-
-export const revokePermission = () =>
-  new Promise((res, rej) => {
-    navigator.permissions
-      .query({ name: "geolocation" })
-      .then(result => {
-        if (result.state === "granted") {
-          res(true);
-        } else {
-          res(false);
-        }
-      })
-      .catch(err => rej(err));
-  });

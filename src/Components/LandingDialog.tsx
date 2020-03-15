@@ -6,13 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import MuiDialogTitle from "../Components/MuiDialogTitle";
 import styled from "../Styles/index";
 import { useLocation, useHistory } from "react-router-dom";
-import {
-  NOTICE_DIALOG,
-  NOTICE_CHECK_KEY,
-  NOTICE_CHECK_TOKEN,
-  version,
-  updateDate
-} from "../constants";
+import { NOTICE_DIALOG, NOTICE_CHECK_KEY, NOTICE_CHECK_TOKEN, updateDate } from "../constants";
 import moment from "moment";
 
 const DialogContent = withStyles((theme: Theme) => ({
@@ -83,7 +77,6 @@ export default function LandingDialog() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const history = useHistory();
-  console.log(location);
   useEffect(() => {
     const checkToken = localStorage.getItem(NOTICE_CHECK_KEY);
     if (!checkToken || checkToken !== NOTICE_CHECK_TOKEN) {
@@ -115,8 +108,8 @@ export default function LandingDialog() {
       </MuiDialogTitle>
       <DialogContent dividers>
         <Typography gutterBottom variant="body2">
-          본 서비스는 정부 공공 마스크 재고 정보 API로 약국, 우체국, 하나로 마트의 재고 정보를
-          이용하고 있습니다.
+          본 서비스는 정부 공공 마스크 재고 정보 API로 <RedText>약국, 우체국, 하나로 마트</RedText>
+          의 재고 정보를 이용하고 있습니다. API 베타서비스 기간이 3월 16일까지로 변경되었습니다.
         </Typography>
         <Typography gutterBottom variant="body2">
           빠른 시일 내에 알림 추가, 어플리케이션이 제작될 예정입니다. 더 좋은 서비스를 제공하기 위해
@@ -140,7 +133,7 @@ export default function LandingDialog() {
         </Typography>
         <Typography variant="body2">1. 공적 마스크 정보는 5분 이상 지연된 정보입니다.</Typography>
         <Typography variant="body2">
-          2. 3월 15일까지 정부 데이터 공개는 베타서비스 중으로 실수량과 일부 차이가 있을 수 있습니다
+          2. 3월 16일까지 정부 데이터 공개는 베타서비스 중으로 실수량과 일부 차이가 있을 수 있습니다
         </Typography>
         <Typography gutterBottom variant="body2">
           3. 마스크 재고는 다음 4개의 구간으로 나타납니다.

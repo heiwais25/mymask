@@ -1,9 +1,9 @@
 import { getDistance } from "geolib";
-import { ILatLngBounds, ILatLng } from "../KakaoMap/types";
+import { ILatLngBounds, ILatLng, IMarker } from "../KakaoMap/types";
 import _ from "lodash";
 import moment from "moment";
-import { IStore } from "../../hooks/useFetchStores";
-import { statusString, rangeString } from "../../constants";
+import { IStore, IVisibleRemainStat } from "../../hooks/useFetchStores";
+import { statusString, rangeString, markerIcon } from "../../constants";
 
 export const getLatLngDistance = (a: ILatLng, b: ILatLng) => {
   return getDistance({ lat: a.getLat(), lng: a.getLng() }, { lat: b.getLat(), lng: b.getLng() });
@@ -84,3 +84,44 @@ export const getInfoWindow = (store: IStore) => `
 </div>
 </div>
   `;
+
+export const getEmptyMarkerSet = (): { [key in IVisibleRemainStat]: IMarker[] } => ({
+  plenty: [],
+  some: [],
+  few: [],
+  empty: []
+});
+
+export const getMapMarkerIcon = (store: IStore) =>
+  new window.kakao.maps.MarkerImage(
+    markerIcon[store.visible_remain_stat],
+    new window.kakao.maps.Size(28, 40),
+    {
+      offset: new window.kakao.maps.Point(16, 34),
+      alt: "markerOfStore",
+      shape: "rect"
+      // coords: "1,20,1,9,5,2,10,0,21,0,27,3,30,9,30,20,17,33,14,33"
+    }
+  );
+
+export const getMapCustomOverlay = (store: IStore) =>
+  new window.kakao.maps.CustomOverlay({
+    position: new window.kakao.maps.LatLng(store.lat, store.lng),
+    content: getInfoWindow(store),
+    clickable: true,
+    xAnchor: 0.5,
+    yAnchor: 1.35,
+    zIndex: 999
+  });
+
+export const getMapMarkerOverlay = (store: IStore) => {
+  const icon = getMapMarkerIcon(store);
+  const overlay = getMapCustomOverlay(store);
+
+  const marker = new window.kakao.maps.Marker({
+    position: overlay.getPosition(),
+    image: icon
+  });
+
+  return { marker, overlay };
+};

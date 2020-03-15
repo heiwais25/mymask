@@ -1,22 +1,51 @@
 import { useCallback, useState, useEffect } from "react";
 import { IStore, IVisibleRemainStat } from "./useFetchStores";
-import { IMarker, ICustomOverlay, ILatLng, ICircle } from "../Components/KakaoMap/types";
+import { IMarker, ICustomOverlay, ILatLng } from "../Components/KakaoMap/types";
 import { IMap, IMarkerClusterer } from "../Components/KakaoMap/types";
 import _ from "lodash";
-import { getInfoWindow } from "../Components/utils/maps";
-import { markerIcon, FETCH_DISTANCE } from "../constants";
-import theme from "../Styles/Theme";
+import { getEmptyMarkerSet, getMapMarkerOverlay } from "../Components/utils/maps";
+import { values, keys } from "../utils/base";
+import { CLUSTER_MIN_LEVEL } from "../constants";
 
 type Params = {
   map: IMap | undefined;
   clusterMinLevel?: number;
+  markersVisibility: { [key in IVisibleRemainStat]: boolean };
   onClick?: (store: IStore) => void;
 };
 
-export default ({ map, clusterMinLevel = 7, onClick = (store: IStore) => null }: Params) => {
+let markerSet = getEmptyMarkerSet();
+let markerInfoByCode: {
+  [key: string]: {
+    marker: IMarker;
+    overlay: ICustomOverlay;
+  };
+} = {};
+let clickedMarkerCode: string;
+let zIndex = 0;
+
+export default ({
+  map,
+  clusterMinLevel = 7,
+  markersVisibility,
+  onClick = (store: IStore) => null
+}: Params) => {
   const [clusterer, setClusterer] = useState<IMarkerClusterer>();
-  const [overlays, setOverlays] = useState<ICustomOverlay[]>([]);
-  const circles: ICircle[] = [];
+
+  const closeOverlays = useCallback(() => {
+    markerInfoByCode[clickedMarkerCode]?.overlay.setMap(null);
+    clickedMarkerCode = "";
+  }, []);
+
+  const handleZoomChange = useCallback(() => {
+    if (map) {
+      const currentLevel = map.getLevel();
+      if (currentLevel < CLUSTER_MIN_LEVEL) {
+      } else {
+        closeOverlays();
+      }
+    }
+  }, [map, closeOverlays]);
 
   useEffect(() => {
     if (map) {
@@ -29,138 +58,116 @@ export default ({ map, clusterMinLevel = 7, onClick = (store: IStore) => null }:
           minClusterSize: 1
         })
       );
+      window.kakao.maps.event.addListener(map, "zoom_changed", handleZoomChange);
+      window.kakao.maps.event.addListener(map, "click", closeOverlays);
     }
-  }, [map, clusterMinLevel]);
+    return () => {
+      if (map) {
+        window.kakao.maps.event.removeListener(map, "zoom_changed", handleZoomChange);
+        window.kakao.maps.event.removeListener(map, "click", closeOverlays);
+      }
+    };
+  }, [map, clusterMinLevel, closeOverlays, handleZoomChange]);
 
-  useEffect(() => {
-    if (map) {
-      window.kakao.maps.event.addListener(map, "click", () => {
-        overlays.forEach(overlay => overlay.setMap(null));
-      });
-    }
-  }, [map, overlays]);
+  const handleMarkerClick = useCallback(
+    store => () => {
+      const { marker, overlay } = markerInfoByCode[store.code];
+      if (map && marker && overlay) {
+        const currentOpen = overlay.getMap() !== null;
+        markerInfoByCode[clickedMarkerCode]?.overlay.setMap(null);
+        clickedMarkerCode = "";
+
+        marker.setZIndex(zIndex);
+        zIndex += 1;
+        if (!currentOpen) {
+          overlay.setMap(map);
+          clickedMarkerCode = store.code;
+        }
+        map.panTo(marker.getPosition());
+      }
+    },
+    [map]
+  );
 
   const addMarker = useCallback(
     (
-      oldMarkers: { [key in IVisibleRemainStat]: IMarker[] },
       newStores: IStore[],
       filterState?: { [key in IVisibleRemainStat]: boolean },
       lastFetchLatLng?: ILatLng
     ) => {
-      // if (map && lastFetchLatLng) {
-      //   circles.forEach(circle => circle.setMap(null));
+      // Clear previous data
+      markerInfoByCode[clickedMarkerCode]?.marker.setMap(null);
+      markerInfoByCode[clickedMarkerCode]?.overlay.setMap(null);
+      clusterer?.clear();
+      keys(markerInfoByCode).forEach(key => delete markerInfoByCode[key]);
+      markerSet = getEmptyMarkerSet();
 
-      //   const circle = new window.kakao.maps.Circle({
-      //     center: lastFetchLatLng, // 원의 중심좌표 입니다
-      //     radius: FETCH_DISTANCE, // 미터 단위의 원의 반지름입니다
-      //     strokeWeight: 1, // 선의 두께입니다
-      //     strokeColor: theme.darkGreyColor, // 선의 색깔입니다
-      //     strokeOpacity: 1, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-      //     strokeStyle: "solid", // 선의 스타일 입니다
-      //     fillColor: theme.lightPrimaryColor, // 채우기 색깔입니다
-      //     fillOpacity: 0.3 // 채우기 불투명도 입니다
-      //   });
-      //   circle.setMap(map);
-      //   circles.push(circle);
-      // }
+      zIndex = 0;
 
-      const newMarkers: { [key in IVisibleRemainStat]: IMarker[] } = {
-        plenty: [],
-        some: [],
-        few: [],
-        empty: []
-      };
-      overlays.splice(0, overlays.length);
-      let zIndex = 0;
-      let testInfos: ICustomOverlay[] = [];
-
-      const flattenMarkers = _.flatten(Object.values(oldMarkers));
-      // Clear old Markers
-      clusterer?.removeMarkers(flattenMarkers);
-      flattenMarkers.forEach(marker => marker.setMap(null));
-      let newInfos: ICustomOverlay[] = [];
       if (map) {
         newStores.forEach(store => {
-          const icon = new window.kakao.maps.MarkerImage(
-            markerIcon[store.visible_remain_stat],
-            new window.kakao.maps.Size(28, 40),
-            {
-              offset: new window.kakao.maps.Point(16, 34),
-              alt: "markerOfStore",
-              shape: "rect"
-              // coords: "1,20,1,9,5,2,10,0,21,0,27,3,30,9,30,20,17,33,14,33"
-            }
-          );
+          const { marker, overlay } = getMapMarkerOverlay(store);
 
-          const latlng = new window.kakao.maps.LatLng(store.lat, store.lng);
-          const marker = new window.kakao.maps.Marker({
-            position: latlng,
-            image: icon
-          });
+          // Add callback
+          window.kakao.maps.event.addListener(marker, "click", handleMarkerClick(store));
 
-          const customOverlay = new window.kakao.maps.CustomOverlay({
-            position: latlng,
-            content: getInfoWindow(store),
-            clickable: true,
-            xAnchor: 0.5,
-            yAnchor: 1.35,
-            zIndex: 999
-          });
-          testInfos.push(customOverlay);
-          newInfos.push(customOverlay);
-
-          // Event 등록
-          window.kakao.maps.event.addListener(marker, "click", () => {
-            zIndex += 1;
-            testInfos.forEach(info => {
-              if (info === customOverlay && !customOverlay.getMap()) {
-                info.setMap(map);
-              } else {
-                info.setMap(null);
-              }
-            });
-            marker.setZIndex(zIndex);
-            map.panTo(latlng);
-          });
-
+          // Save
           marker.setMap(map);
+          if (clickedMarkerCode === store.code) {
+            overlay.setMap(map);
+          }
 
-          newMarkers[store.visible_remain_stat].push(marker);
+          markerSet[store.visible_remain_stat].push(marker);
+          markerInfoByCode[store.code] = {
+            marker,
+            overlay
+          };
 
           return marker;
         });
-        clusterer?.addMarkers(_.flatten(Object.values(newMarkers)));
 
+        clusterer?.addMarkers(_.flatten(values(markerSet)));
+
+        // Apply filter if it is set
         if (filterState) {
-          Object.keys(filterState).forEach(key => {
-            if (!filterState[key as IVisibleRemainStat]) {
-              clusterer?.removeMarkers(newMarkers[key as IVisibleRemainStat]);
+          keys(filterState).forEach(key => {
+            if (!filterState[key]) {
+              clusterer?.removeMarkers(markerSet[key]);
             }
           });
         }
-        setOverlays(newInfos);
       }
-      return { markers: newMarkers, overlays: newInfos };
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [map, clusterer]
   );
 
-  const setMarkersVisible = useCallback(
-    (markers: IMarker[]) => {
-      clusterer?.addMarkers(markers);
-    },
+  useEffect(() => {
+    keys(markersVisibility).forEach(key => {
+      if (markersVisibility[key]) {
+        clusterer?.addMarkers(markerSet[key]);
+      } else {
+        clusterer?.removeMarkers(markerSet[key]);
+      }
+      // markerInfoByCode[clickedMarkerCode]?.overlay.setMap(null);
+    });
+    if (!markerInfoByCode[clickedMarkerCode]?.marker.getMap()) {
+      markerInfoByCode[clickedMarkerCode]?.overlay.setMap(null);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [map, clusterer]
+  }, [markersVisibility]);
+
+  const openStoreOverlay = useCallback(
+    (store: IStore) => {
+      markerInfoByCode[clickedMarkerCode]?.overlay.setMap(null);
+      const markerInfo = markerInfoByCode[store.code];
+      if (map && markerInfo) {
+        markerInfo.overlay.setMap(map);
+      }
+      clickedMarkerCode = store.code;
+    },
+    [map]
   );
 
-  const setMarkersHidden = useCallback(
-    (markers: IMarker[]) => {
-      clusterer?.removeMarkers(markers);
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [map, clusterer]
-  );
-
-  return { addMarker, setMarkersVisible, setMarkersHidden };
+  return { addMarker, openStoreOverlay, closeOverlays };
 };

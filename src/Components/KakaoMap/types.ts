@@ -100,7 +100,8 @@ export type IKakaoMap = {
     addListener: (
       map: IMap | ICustomOverlay | IMarker,
       eventType: IEventType,
-      callback: () => void
+      callback: () => void,
+      option?: { passive: boolean }
     ) => void;
     removeListener: (
       map: IMap | ICustomOverlay | IMarker,

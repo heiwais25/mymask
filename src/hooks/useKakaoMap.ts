@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import { IMapOption, IKakaoMap, IMap } from "../Components/KakaoMap/types";
+import { useEffect, useState, useCallback } from "react";
+import { IMapOption, IKakaoMap, IMap, ILatLng } from "../Components/KakaoMap/types";
+import { DEFAULT_ZOOM_LEVEL } from "../constants";
 
 declare global {
   interface Window {
@@ -9,10 +10,7 @@ declare global {
   }
 }
 
-export default (
-  ref: React.MutableRefObject<HTMLDivElement | null>,
-  options: IMapOption
-) => {
+export default (ref: React.MutableRefObject<HTMLDivElement | null>, options: IMapOption) => {
   const [map, setMap] = useState<IMap>();
 
   useEffect(() => {
@@ -23,5 +21,15 @@ export default (
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return map;
+  const moveToLatLng = useCallback(
+    (latLng: ILatLng) => {
+      if (map) {
+        map.setCenter(latLng);
+        map.setLevel(DEFAULT_ZOOM_LEVEL);
+      }
+    },
+    [map]
+  );
+
+  return { map, moveToLatLng };
 };
