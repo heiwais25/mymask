@@ -70,6 +70,11 @@ const IconText = styled.div`
   }
 `;
 
+const Link = styled.a`
+  text-decoration: none;
+  color: ${props => props.theme.primaryColor};
+`;
+
 const RedText = styled.span`
   color: ${props => props.theme.redColor};
 `;
@@ -112,7 +117,7 @@ export default function LandingDialog() {
           의 재고 정보를 이용하고 있습니다. API 베타서비스 기간이 3월 16일까지로 변경되었습니다.
         </Typography>
         <Typography gutterBottom variant="body2">
-          빠른 시일 내에 알림 추가, 어플리케이션이 제작될 예정입니다. 더 좋은 서비스를 제공하기 위해
+          빠른 시일 내에 알림 기능이 추가될 예정입니다. 더 좋은 서비스를 제공하기 위해
           노력하겠습니다.
         </Typography>
         <Typography gutterBottom variant="body2">
@@ -125,8 +130,12 @@ export default function LandingDialog() {
         <Typography gutterBottom variant="body1" color="secondary">
           <RedText>업데이트</RedText>
         </Typography>
+        <Typography variant="body2">1. 새로 고침 버튼이 추가되었습니다.</Typography>
         <Typography variant="body2">
-          1. 카카오지도를 활용한 길 찾기 기능이 추가되었습니다.
+          2. 어플리케이션이 제작되었습니다. 원스토어에서 다운로드받으실 수 있습니다.{" "}
+          <Link target="_blank" href="https://onestore.co.kr/userpoc/apps/view?pid=0000746957">
+            (링크)
+          </Link>
         </Typography>
         <Typography gutterBottom variant="body1" color="secondary">
           <RedText>유의사항</RedText>

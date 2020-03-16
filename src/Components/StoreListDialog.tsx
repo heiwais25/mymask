@@ -128,7 +128,7 @@ export default ({ stores, handleItemClick }: Props) => {
             <Row>
               <TitleBox>
                 <Title>{store.name}</Title>
-                <Meta>{`${store.distance}m`}</Meta>
+                {store.distance >= 0 && <Meta>{`${store.distance}m`}</Meta>}
               </TitleBox>
             </Row>
             <Row>

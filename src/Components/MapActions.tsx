@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "../Styles/index";
-import { Location, UpArrow, Plus, Minus } from "../Icons";
+import { Location, UpArrow, Plus, Minus, Refresh } from "../Icons";
 import Loader from "./Loader";
 import { isMobile } from "react-device-detect";
 
@@ -13,16 +13,21 @@ const RightSideButtons = styled.div`
 
 type IconButtonProps = {
   "data-focused"?: boolean;
+  "data-loading"?: boolean;
 };
 
 const IconButton = styled.div<IconButtonProps>`
   ${props => props.theme.buttonBase};
+  ${props => props.theme.iconButton};
   svg {
     fill: ${props => (props["data-focused"] ? "white !important" : props.theme.darkGreyColor)};
   }
-  ${props => props.theme.iconButton};
-
-  background-color: ${props => (props["data-focused"] ? props.theme.primaryColor : "white")};
+  background-color: ${props =>
+    props["data-focused"]
+      ? props.theme.primaryColor
+      : props["data-loading"]
+      ? props.theme.lightGreyColor
+      : "white"};
 
   :not(:last-child) {
     margin-bottom: ${props => props.theme.mapActionPadding};
@@ -127,13 +132,6 @@ const ZoomIcon = styled.div`
   width: 100%;
 `;
 
-// const BottomLeft = styled.div`
-//   position: absolute;
-//   bottom: ${props => props.theme.mapActionPadding};
-//   left: ${props => props.theme.mapActionPadding};
-//   z-index: 10;
-// `;
-
 const MeInfo = styled.span`
   text-shadow: 0.5px 0.5px 0.5px gray;
   :not(:last-child) {
@@ -145,6 +143,7 @@ type Props = {
   geoGranted: boolean;
   hasItem: boolean;
   loading: boolean;
+  reloadStore: () => void;
   openListDialog: () => void;
   moveToCurrentLocation: () => void;
   isCurrentLocation?: boolean;
@@ -158,17 +157,21 @@ export default ({
   hasItem,
   changeZoom,
   moveToCurrentLocation,
+  reloadStore,
   isCurrentLocation = false
 }: Props) => {
   return (
     <>
-      {geoGranted && (
-        <RightSideButtons>
+      <RightSideButtons>
+        {geoGranted && (
           <IconButton onClick={moveToCurrentLocation} data-focused={isCurrentLocation}>
             <Location size={24} />
           </IconButton>
-        </RightSideButtons>
-      )}
+        )}
+        <IconButton onClick={!loading ? () => reloadStore() : () => null} data-loading={loading}>
+          <Refresh size={24} />
+        </IconButton>
+      </RightSideButtons>
       <BottomSign>
         <MeInfo>김종현</MeInfo>
         <MeInfo>jongkoo25@gmail.com</MeInfo>

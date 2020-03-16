@@ -37,7 +37,7 @@ type lastFetchInfo = {
   time?: Date;
 };
 
-const fillStoreInfo = (store: IStore, center: ILatLng) => {
+const fillStoreInfo = (store: IStore, currentLocation?: ILatLng) => {
   if (!store.remain_stat) {
     store.remain_stat = "empty";
   }
@@ -50,27 +50,33 @@ const fillStoreInfo = (store: IStore, center: ILatLng) => {
     store.visible_remain_stat = store.remain_stat;
   }
 
-  store.distance = getDistance(
-    { lat: store.lat, lng: store.lng },
-    {
-      lat: center.getLat(),
-      lng: center.getLng()
-    }
-  );
+  if (currentLocation) {
+    store.distance = getDistance(
+      { lat: store.lat, lng: store.lng },
+      {
+        lat: currentLocation.getLat(),
+        lng: currentLocation.getLng()
+      }
+    );
+  } else {
+    store.distance = -1;
+  }
 
   return store;
 };
 
-export default (positionInfo: MapPositionInfo | undefined) => {
+export default (positionInfo: MapPositionInfo | undefined, currentLocation?: ILatLng) => {
   const [stores, setStores] = useState<IStore[]>([]);
   const [loading, setLoading] = useState(false);
   const [lastFetchInfo, setLastFetchInfo] = useState<lastFetchInfo>({});
+  const [reloading, setReloading] = useState(false);
 
   useEffect(() => {
     if (positionInfo) {
       const currentFetchTime = moment();
       // If the limit doesn't change, doesn't fetch
       if (
+        !reloading &&
         lastFetchInfo.time &&
         currentFetchTime.isBefore(moment(lastFetchInfo.time).add(TIME_INTERVAL, "m")) &&
         lastFetchInfo.latlng &&
@@ -99,20 +105,25 @@ export default (positionInfo: MapPositionInfo | undefined) => {
             filterStores(result.data.stores)
               .filter(store => store.lat && store.lng)
               .map(store => {
-                return fillStoreInfo(store, positionInfo.center);
+                return fillStoreInfo(store, currentLocation);
               })
           );
         })
         .finally(() => {
           setLoading(false);
+          setReloading(false);
         });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [positionInfo]);
+  }, [positionInfo, reloading, currentLocation]);
 
   const clearStores = useCallback(() => {
     setStores([]);
   }, []);
 
-  return { stores, lastFetchInfo, setStores, clearStores, loading };
+  const reloadStores = useCallback(() => {
+    setReloading(true);
+  }, []);
+
+  return { stores, lastFetchInfo, setStores, clearStores, reloadStores, loading };
 };

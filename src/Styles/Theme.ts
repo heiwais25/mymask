@@ -15,6 +15,7 @@ const theme = {
     -webkit-appearance: none;
     -webkit-tap-highlight-color: transparent;
   `,
+  lightGreyColor: "#cfd4d5",
 
   markerGreenColor: "#27ae60",
   markerYelloColor: "#f39c12",
@@ -69,8 +70,6 @@ const theme = {
   blackColor: "#333333",
 
   borderGreyColor: "#cacaca",
-
-  lightGreyColor: "#cfd4d5",
 
   redFocusedColor: "#d8665c",
   blueFocuesdColor: "#127965",

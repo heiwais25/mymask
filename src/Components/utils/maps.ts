@@ -51,7 +51,7 @@ export const getInfoWindow = (store: IStore) => `
   <div class="_window_col">
     <div class="_row" style="display:flex; align-items:center">
       <div class="_window_title">${store.name}</div>
-      <span class="distance">${store.distance} m</span>
+      <span class='distance'>${store.distance >= 0 ? store.distance + "m" : ""} </span>
     </div>
     <div class="_row address">${store.addr}</div>
     <div class="_row">
@@ -95,7 +95,7 @@ export const getEmptyMarkerSet = (): { [key in IVisibleRemainStat]: IMarker[] } 
 export const getMapMarkerIcon = (store: IStore) =>
   new window.kakao.maps.MarkerImage(
     markerIcon[store.visible_remain_stat],
-    new window.kakao.maps.Size(28, 40),
+    new window.kakao.maps.Size(24, 35),
     {
       offset: new window.kakao.maps.Point(16, 34),
       alt: "markerOfStore",

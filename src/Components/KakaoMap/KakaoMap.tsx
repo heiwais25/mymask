@@ -47,7 +47,10 @@ export default ({ markersVisibility }: Props) => {
     disableDoubleClick: true
   });
   const positions = useKakaoMapBounds({ map, debounce: 500 });
-  const { stores, lastFetchInfo, loading } = useFetchStores(positions);
+  const { stores, lastFetchInfo, reloadStores, loading } = useFetchStores(
+    positions,
+    currentLocation
+  );
   const { addMarker, openStoreOverlay, closeOverlays } = useKakaoMapMarker({
     map,
     clusterMinLevel: CLUSTER_MIN_LEVEL,
@@ -119,6 +122,10 @@ export default ({ markersVisibility }: Props) => {
     }
   };
 
+  const reloadStore = () => {
+    reloadStores();
+  };
+
   return (
     <Container>
       <Map ref={ref} />
@@ -130,6 +137,7 @@ export default ({ markersVisibility }: Props) => {
         moveToCurrentLocation={moveToCurrentLocation}
         isCurrentLocation={isCurrentLocation}
         changeZoom={changeZoom}
+        reloadStore={reloadStore}
       />
       <StoreListDialog
         stores={stores.filter(store => markersVisibility[store.visible_remain_stat])}

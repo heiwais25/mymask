@@ -16,6 +16,11 @@ export default (ref: React.MutableRefObject<HTMLDivElement | null>, options: IMa
   useEffect(() => {
     const map = new window.kakao.maps.Map(ref.current, options);
     // API's maximum length is about 10000 which is zoom 6
+
+    if (!map) {
+      console.log("Failed to load kakaomap");
+      alert("카카오지도가 지원되지 않는 환경입니다.");
+    }
     setMap(map);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
