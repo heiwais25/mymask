@@ -2,7 +2,6 @@ import React from "react";
 import { createStyles, Theme, WithStyles } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
-import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 
@@ -33,7 +32,7 @@ const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
   const { children, classes, onClose, ...other } = props;
   return (
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant="body1">{children}</Typography>
+      {children}
       {onClose ? (
         <IconButton
           aria-label="close"

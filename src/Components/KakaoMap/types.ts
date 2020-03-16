@@ -1,4 +1,4 @@
-import { CSSProperties } from "react";
+import { CSSProperties, MutableRefObject } from "react";
 
 export type IEventType =
   | "center_changed"
@@ -96,6 +96,9 @@ export type IKakaoMap = {
     }): ICircle;
   };
 
+  StaticMap: {
+    new (container: HTMLElement | null, option: { center: ILatLng; level: number }): IStaticMap;
+  };
   event: {
     addListener: (
       map: IMap | ICustomOverlay | IMarker,
@@ -112,6 +115,9 @@ export type IKakaoMap = {
   services: {
     Places: {
       new (): IPlace;
+    };
+    Geocoder: {
+      new (): IGeoCoder;
     };
   };
 };
@@ -145,6 +151,7 @@ export type IPlace = {
     options?: {
       category_group_code?: string;
       location?: ILatLng;
+
       x?: number;
       y?: number;
       radius?: number;
@@ -290,4 +297,28 @@ export type ICircle = {
   getPosition: () => ILatLng;
   setRadius: (radius: number) => void;
   getRadius: () => number;
+};
+
+export type IStaticMap = {
+  setCenter: (latLng: ILatLng) => void;
+  getCenter: () => ILatLng;
+};
+
+export type IGeoCoder = {
+  addressSearch: (
+    addr: string,
+    callback: (result: string, status: IStatus) => void,
+    options?: {
+      page?: number;
+      size?: number;
+    }
+  ) => void;
+  coord2Address: (
+    x: number,
+    y: number,
+    callback: (result: { address: { address_name: string } }[], status: IStatus) => void,
+    options?: {
+      input_coords?: unknown;
+    }
+  ) => void;
 };

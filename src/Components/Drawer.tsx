@@ -6,7 +6,7 @@ import { Divider, SwipeableDrawer, ListItem } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 
 const Container = styled.div`
-  width: 150px;
+  width: 200px;
   height: 100%;
   display: flex;
   flex-direction: column;

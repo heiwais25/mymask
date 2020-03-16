@@ -114,7 +114,7 @@ export default function LandingDialog() {
       <DialogContent dividers>
         <Typography gutterBottom variant="body2">
           본 서비스는 정부 공공 마스크 재고 정보 API로 <RedText>약국, 우체국, 하나로 마트</RedText>
-          의 재고 정보를 이용하고 있습니다. API 베타서비스 기간이 3월 16일까지로 변경되었습니다.
+          의 재고 정보를 이용하고 있습니다.
         </Typography>
         <Typography gutterBottom variant="body2">
           빠른 시일 내에 알림 기능이 추가될 예정입니다. 더 좋은 서비스를 제공하기 위해
@@ -132,7 +132,10 @@ export default function LandingDialog() {
         </Typography>
         <Typography variant="body2">1. 새로 고침 버튼이 추가되었습니다.</Typography>
         <Typography variant="body2">
-          2. 어플리케이션이 제작되었습니다. 원스토어에서 다운로드받으실 수 있습니다.{" "}
+          2. 장소 저장 기능이 추가되었습니다. 자주 찾으시는 장소를 저장해놓으세요.
+        </Typography>
+        <Typography variant="body2">
+          3. 어플리케이션이 제작되었습니다. 원스토어에서 다운로드받으실 수 있습니다.{" "}
           <Link target="_blank" href="https://onestore.co.kr/userpoc/apps/view?pid=0000746957">
             (링크)
           </Link>
@@ -141,11 +144,8 @@ export default function LandingDialog() {
           <RedText>유의사항</RedText>
         </Typography>
         <Typography variant="body2">1. 공적 마스크 정보는 5분 이상 지연된 정보입니다.</Typography>
-        <Typography variant="body2">
-          2. 3월 16일까지 정부 데이터 공개는 베타서비스 중으로 실수량과 일부 차이가 있을 수 있습니다
-        </Typography>
         <Typography gutterBottom variant="body2">
-          3. 마스크 재고는 다음 4개의 구간으로 나타납니다.
+          2. 마스크 재고는 다음 4개의 구간으로 나타납니다.
         </Typography>
         <BottomIcons>
           <IconBox>

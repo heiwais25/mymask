@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
-import { STORE_LIST_DIALOG, DEFAULT_ZOOM_LEVEL, CLUSTER_MIN_LEVEL } from "../../constants";
+import { DEFAULT_ZOOM_LEVEL, CLUSTER_MIN_LEVEL, STORE_LIST_DIALOG } from "../../constants";
 import { IKakaoMap, ILatLng } from "./types";
 import styled from "../../Styles/index";
 import MapActions from "../MapActions";
@@ -15,6 +15,7 @@ import { useGeoLocation } from "../../hooks/useGeoLocation";
 import { isLatLngEqaul } from "../utils/maps";
 import SearchDialog from "../SearchDialog";
 import { Container } from "./KakaoMapContainer";
+import BookmarkDialog from "../BookmarkDialog";
 
 declare global {
   interface Window {
@@ -30,6 +31,13 @@ const Map = styled.div`
 
 type Props = {
   markersVisibility: { [key in IVisibleRemainStat]: boolean };
+};
+
+export type BookmarkData = {
+  name: string;
+  address: string;
+  center: ILatLng;
+  zoom: number;
 };
 
 export default ({ markersVisibility }: Props) => {
@@ -99,12 +107,19 @@ export default ({ markersVisibility }: Props) => {
     }
   };
 
-  const openListDialog = () => {
-    if (stores.length > 0) {
+  const openListDialog = (hashTarget: string) => {
+    if (hashTarget === STORE_LIST_DIALOG) {
+      if (stores.length > 0) {
+        history.push({
+          hash: hashTarget
+        });
+      }
+    } else {
       history.push({
-        hash: STORE_LIST_DIALOG
+        hash: hashTarget
       });
     }
+
     closeOverlays();
   };
 
@@ -144,6 +159,7 @@ export default ({ markersVisibility }: Props) => {
         handleItemClick={moveToStore}
       />
       <SearchDialog handleItemClick={moveToLatLng} />
+      <BookmarkDialog map={map} handleItemClick={moveToLatLng} />
     </Container>
   );
 };

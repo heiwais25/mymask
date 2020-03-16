@@ -6,12 +6,15 @@ export const STORE_LIST_DIALOG = "#STORE_LIST_DIALOG";
 export const STORE_DETAIL_DIALOG = "#STORE_DETAIL_DIALOG";
 export const SEARCH_DIALOG = "#SEARCH_DIALOG";
 export const NOTICE_DIALOG = "#NOTICE_DIALOG";
+export const BOOKMARK_DIALOG = "#BOOKMARK_DIALOG";
+export const BOOKMARK_EDIT_DIALOG = "?BOOKMARK_EDIT_DIALOG";
+export const BOOKMARK_KEY = "BOOKMARK_KEY";
 
 export const TIME_INTERVAL = 2; // in minute
 export const FETCH_DISTANCE = 2000; // in minute
 
-export const version = "v0.0.8";
-export const updateDate = moment("2020-03-16T13:00:00Z").toDate();
+export const version = "v0.0.9";
+export const updateDate = moment("2020-03-16T19:00:00Z").toDate();
 export const NOTICE_CHECK_TOKEN = `${version}/dialog-check`;
 export const NOTICE_CHECK_KEY = "dialog-check-key";
 

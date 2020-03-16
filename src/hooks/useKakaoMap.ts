@@ -27,10 +27,10 @@ export default (ref: React.MutableRefObject<HTMLDivElement | null>, options: IMa
   }, []);
 
   const moveToLatLng = useCallback(
-    (latLng: ILatLng) => {
+    (latLng: ILatLng, level?: number) => {
       if (map) {
-        map.setCenter(latLng);
-        map.setLevel(DEFAULT_ZOOM_LEVEL);
+        map.setCenter(new window.kakao.maps.LatLng(latLng.getLat(), latLng.getLng()));
+        map.setLevel(level ? level : DEFAULT_ZOOM_LEVEL);
       }
     },
     [map]

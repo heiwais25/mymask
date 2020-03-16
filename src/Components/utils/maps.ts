@@ -125,3 +125,16 @@ export const getMapMarkerOverlay = (store: IStore) => {
 
   return { marker, overlay };
 };
+
+export const convertCoord2AddressAPI = async (latlng: ILatLng) => {
+  const geocoder = new window.kakao.maps.services.Geocoder();
+  return new Promise<string>((res, rej) => {
+    geocoder.coord2Address(latlng.getLng(), latlng.getLat(), (result, state) => {
+      if (state === "OK") {
+        res(result[0].address.address_name);
+      } else {
+        rej("NoElement");
+      }
+    });
+  });
+};
