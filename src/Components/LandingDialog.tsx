@@ -70,11 +70,6 @@ const IconText = styled.div`
   }
 `;
 
-const Link = styled.a`
-  text-decoration: none;
-  color: ${props => props.theme.primaryColor};
-`;
-
 const RedText = styled.span`
   color: ${props => props.theme.redColor};
 `;
@@ -134,12 +129,7 @@ export default function LandingDialog() {
         <Typography variant="body2">
           2. 장소 저장 기능이 추가되었습니다. 자주 찾으시는 장소를 저장해놓으세요.
         </Typography>
-        <Typography variant="body2">
-          3. 어플리케이션이 제작되었습니다. 원스토어에서 다운로드받으실 수 있습니다.{" "}
-          <Link target="_blank" href="https://onestore.co.kr/userpoc/apps/view?pid=0000746957">
-            (링크)
-          </Link>
-        </Typography>
+        <Typography variant="body2">3. 어플리케이션이 제작되었습니다.</Typography>
         <Typography gutterBottom variant="body1" color="secondary">
           <RedText>유의사항</RedText>
         </Typography>

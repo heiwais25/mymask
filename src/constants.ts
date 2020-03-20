@@ -13,8 +13,8 @@ export const BOOKMARK_KEY = "BOOKMARK_KEY";
 export const TIME_INTERVAL = 2; // in minute
 export const FETCH_DISTANCE = 2000; // in minute
 
-export const version = "v0.0.9";
-export const updateDate = moment("2020-03-16T19:00:00Z").toDate();
+export const version = "v1.0.2";
+export const updateDate = moment("2020-03-20T11:00:00Z").toDate();
 export const NOTICE_CHECK_TOKEN = `${version}/dialog-check`;
 export const NOTICE_CHECK_KEY = "dialog-check-key";
 
