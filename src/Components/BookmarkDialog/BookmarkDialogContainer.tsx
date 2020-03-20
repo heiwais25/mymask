@@ -80,6 +80,7 @@ export default ({ map, handleItemClick }: Props) => {
         });
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map, editOpen, setCurrentLocation]);
 
   const handleClose = () => {

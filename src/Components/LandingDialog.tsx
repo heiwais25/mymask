@@ -5,20 +5,26 @@ import MuiDialogContent from "@material-ui/core/DialogContent";
 import Typography from "@material-ui/core/Typography";
 import MuiDialogTitle from "../Components/MuiDialogTitle";
 import styled from "../Styles/index";
+import { FacebookShareButton, FacebookIcon, LineShareButton, LineIcon } from "react-share";
 import { useLocation, useHistory } from "react-router-dom";
-import { NOTICE_DIALOG, NOTICE_CHECK_KEY, NOTICE_CHECK_TOKEN, updateDate } from "../constants";
+import {
+  NOTICE_DIALOG,
+  NOTICE_CHECK_KEY,
+  NOTICE_CHECK_TOKEN,
+  updateDate,
+  THIS_URL
+} from "../constants";
 import moment from "moment";
+import { isMobile } from "react-device-detect";
+import { DialogActions, Button } from "@material-ui/core";
+
+const kakaoLinkId = "kakao-link-btn";
 
 const DialogContent = withStyles((theme: Theme) => ({
   root: {
     padding: theme.spacing(2)
   }
 }))(MuiDialogContent);
-
-type Props = {
-  open: boolean;
-  handleClose: () => void;
-};
 
 const BottomIcons = styled.div`
   display: grid;
@@ -70,9 +76,33 @@ const IconText = styled.div`
   }
 `;
 
+const LinkItem = styled.div`
+  :not(:last-child) {
+    padding-right: 8px;
+  }
+`;
+
+const Buttons = styled.div`
+  display: flex;
+  padding: 0px 8px;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+`;
+
+const Links = styled.div`
+  display: flex;
+  align-items: center;
+  img {
+    width: 30px;
+    height: 30px;
+  }
+`;
+
 const RedText = styled.span`
   color: ${props => props.theme.redColor};
 `;
+
 export default function LandingDialog() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
@@ -101,10 +131,22 @@ export default function LandingDialog() {
     }
   };
 
+  const sendLinkKakao = () => {
+    window.Kakao.Link.sendScrap({ requestUrl: THIS_URL });
+  };
+
   return (
-    <Dialog onClose={handleClose} aria-labelledby="customized-dialog-title" open={open}>
+    <Dialog
+      onClose={handleClose}
+      fullScreen={isMobile}
+      fullWidth
+      maxWidth="sm"
+      transitionDuration={0}
+      aria-labelledby="customized-dialog-title"
+      open={open}
+    >
       <MuiDialogTitle id="customized-dialog-title" onClose={handleClose}>
-        알림
+        마이마스크 알림
       </MuiDialogTitle>
       <DialogContent dividers>
         <Typography gutterBottom variant="body2">
@@ -166,6 +208,29 @@ export default function LandingDialog() {
           개발자 : 김종현 (jongkoo25@gmail.com)
         </Typography>
       </DialogContent>
+      <DialogActions>
+        <Buttons>
+          <Links>
+            <LinkItem>공유하기</LinkItem>
+            <LinkItem id={kakaoLinkId} onClick={sendLinkKakao}>
+              <img alt="kakao-link" src="/images/kakaolink_btn_medium.png" />
+            </LinkItem>
+            <LinkItem>
+              <LineShareButton url={THIS_URL}>
+                <LineIcon size={30} borderRadius={10} />
+              </LineShareButton>
+            </LinkItem>
+            <LinkItem>
+              <FacebookShareButton url={THIS_URL}>
+                <FacebookIcon size={30} borderRadius={10} />
+              </FacebookShareButton>
+            </LinkItem>
+          </Links>
+          <Button color="primary" variant="outlined" onClick={handleClose}>
+            닫기
+          </Button>
+        </Buttons>
+      </DialogActions>
     </Dialog>
   );
 }

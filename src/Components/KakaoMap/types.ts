@@ -7,6 +7,11 @@ export type IEventType =
   | "bounds_changed"
   | "click";
 
+export type IKakaoLink = {
+  createScrapButton: (option: { container: string; requestUrl: string }) => void;
+  sendScrap: (option: { requestUrl: string }) => void;
+};
+
 export type IKakaoMap = {
   LatLng: {
     new (lat: number, lng: number): ILatLng;

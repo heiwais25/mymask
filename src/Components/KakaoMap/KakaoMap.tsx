@@ -1,6 +1,6 @@
 import React, { useRef, useEffect, useState } from "react";
 import { DEFAULT_ZOOM_LEVEL, CLUSTER_MIN_LEVEL, STORE_LIST_DIALOG } from "../../constants";
-import { IKakaoMap, ILatLng } from "./types";
+import { IKakaoMap, ILatLng, IKakaoLink } from "./types";
 import styled from "../../Styles/index";
 import MapActions from "../MapActions";
 import useKakaoMap from "../../hooks/useKakaoMap";
@@ -21,6 +21,11 @@ declare global {
   interface Window {
     kakao: {
       maps: IKakaoMap;
+    };
+    Kakao: {
+      isInitialized: () => boolean;
+      init: (key: string) => void;
+      Link: IKakaoLink;
     };
   }
 }

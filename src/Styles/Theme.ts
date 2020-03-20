@@ -29,6 +29,7 @@ const theme = {
   greyColor: "#96A5A6",
 
   mapActionPadding: "10px",
+  mapBottomActionPadding: "20px",
   basePadding: "10px",
   darkGreyColor: "#666666",
   iconButton: `

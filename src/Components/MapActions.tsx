@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "../Styles/index";
-import { Location, UpArrow, Plus, Minus, Refresh, BookMark } from "../Icons";
+import { Location, Plus, Minus, Refresh, BookMark, List } from "../Icons";
 import Loader from "./Loader";
 import { isMobile } from "react-device-detect";
 import { STORE_LIST_DIALOG, BOOKMARK_DIALOG } from "../constants";
@@ -37,14 +37,14 @@ const IconButton = styled.div<IconButtonProps>`
 
 const BottomSideButtons = styled.div`
   position: absolute;
-  bottom: ${props => (isMobile ? props.theme.mapActionPadding : "")};
+  bottom: ${props => (isMobile ? props.theme.mapBottomActionPadding : "")};
   top: ${props => (!isMobile ? props.theme.mapActionPadding : "")};
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
 
   svg {
-    margin-left: 8px;
+    margin-right: 8px;
   }
 `;
 
@@ -82,7 +82,7 @@ const LoaderBox = styled.div`
   position: absolute;
   left: 50%;
   top: 50%;
-  /* transform: translate(-50%, -50%); */
+  transform: translate(-50%, -50%);
   z-index: 1000;
 `;
 
@@ -194,14 +194,12 @@ export default ({
         </ZoomButton>
       </ZoomBox>
 
-      {!loading && (
-        <BottomSideButtons>
-          <ListViewButton data-mobile={hasItem} onClick={() => openListDialog(STORE_LIST_DIALOG)}>
-            <ButtonText>{hasItem ? "목록 보기" : "지도를 움직여보세요"}</ButtonText>
-            {hasItem && isMobile && <UpArrow size={12} />}
-          </ListViewButton>
-        </BottomSideButtons>
-      )}
+      <BottomSideButtons>
+        <ListViewButton data-mobile={hasItem} onClick={() => openListDialog(STORE_LIST_DIALOG)}>
+          {hasItem && isMobile && <List size={12} />}
+          <ButtonText>{hasItem ? "목록 보기" : "지도를 움직여보세요"}</ButtonText>
+        </ListViewButton>
+      </BottomSideButtons>
       {loading && (
         <LoaderBox>
           <Loader size={40} />

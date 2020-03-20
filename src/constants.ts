@@ -2,6 +2,8 @@ import { IRemainStat, IVisibleRemainStat } from "./hooks/useFetchStores";
 import moment from "moment";
 import { isMobile } from "react-device-detect";
 
+export const THIS_URL = "https://mymask.info";
+
 export const STORE_LIST_DIALOG = "#STORE_LIST_DIALOG";
 export const STORE_DETAIL_DIALOG = "#STORE_DETAIL_DIALOG";
 export const SEARCH_DIALOG = "#SEARCH_DIALOG";

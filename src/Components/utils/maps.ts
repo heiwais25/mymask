@@ -51,7 +51,9 @@ export const getInfoWindow = (store: IStore) => `
   <div class="_window_col">
     <div class="_row" style="display:flex; align-items:center">
       <div class="_window_title">${store.name}</div>
-      <span class='distance'>${store.distance >= 0 ? store.distance + "m" : ""} </span>
+      <span class='distance'>${
+        store.distance >= 0 ? getFormattedDistance(store.distance) : ""
+      } </span>
     </div>
     <div class="_row address">${store.addr}</div>
     <div class="_row">
@@ -137,4 +139,14 @@ export const convertCoord2AddressAPI = async (latlng: ILatLng) => {
       }
     });
   });
+};
+
+// distance [m] => [m, km]
+export const getFormattedDistance = (distance: number) => {
+  if (distance >= 1e5) {
+    return `${_.toInteger(distance / 1e3)}km`;
+  } else if (distance >= 1e3) {
+    return `${_.floor(distance / 1e3, 2)}km`;
+  }
+  return `${distance}m`;
 };

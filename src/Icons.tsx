@@ -170,3 +170,27 @@ export const Undo = ({ size = 24, color = "white" }) => (
     <path d="M17.026 22.957c10.957-11.421-2.326-20.865-10.384-13.309l2.464 2.352h-9.106v-8.947l2.232 2.229c14.794-13.203 31.51 7.051 14.794 17.675z" />
   </svg>
 );
+
+export const List = ({ size = 24, color = "white" }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill={color}
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+  >
+    <path d="M4 22h-4v-4h4v4zm0-12h-4v4h4v-4zm0-8h-4v4h4v-4zm3 0v4h17v-4h-17zm0 12h17v-4h-17v4zm0 8h17v-4h-17v4z" />
+  </svg>
+);
+
+export const Map = ({ size = 24, color = "white" }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill={color}
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+  >
+    <path d="M17.545 5l-5.545-4-5.545 4-6.455-4v18l6.455 4 5.545-4 5.545 4 6.455-4v-18l-6.455 4zm-10.545 2.073l4-2.886v13.068l-4 2.885v-13.067zm6-2.886l4 2.886v13.068l-4-2.885v-13.069zm-11 .405l4 2.479v13.294l-4-2.479v-13.294zm20 13.295l-4 2.479v-13.295l4-2.479v13.295z" />
+  </svg>
+);
