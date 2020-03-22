@@ -41,7 +41,7 @@ export const Container = styled.div`
 
     ._window_title {
       display: flex;
-      justify-content: space-between;
+      align-items: flex-end;
     }
 
     ._row {
