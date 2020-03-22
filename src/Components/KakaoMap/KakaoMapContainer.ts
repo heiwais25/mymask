@@ -6,11 +6,19 @@ export const Container = styled.div`
     border: 0 !important;
   }
 
+  .window_container {
+    width: 260px;
+    height: 100px;
+    position: relative;
+  }
+
   .custom_window {
+    position: absolute;
+    bottom: 0;
     cursor: default;
-    word-break: keep-all;
+    z-index: 50;
     line-height: 1.1;
-    width: 270px;
+    width: 260px;
     padding: 5px;
     background-color: white;
     border-radius: 8px;
@@ -24,47 +32,107 @@ export const Container = styled.div`
     .rows {
       width: 100%;
       display: flex;
+      flex-direction: column;
       justify-content: space-between;
       :not(:last-child) {
-        padding-bottom: 8px;
+        padding-bottom: 6px;
       }
     }
 
     ._window_title {
-      font-size: 14px;
-      font-weight: 600;
-      padding-bottom: 4px;
-    }
-
-    ._window_col:first-child {
       display: flex;
-      flex-direction: column;
-      padding-right: 12px;
-      max-width: 200px;
-    }
-
-    ._window_col:nth-child(2) {
-      display: flex;
-      flex-direction: column;
-      padding: 0;
-      width: 60px;
+      justify-content: space-between;
     }
 
     ._row {
       width: 100%;
       white-space: normal;
       :not(:last-child) {
-        padding-bottom: 4px;
+        padding-bottom: 6px;
+      }
+
+      .title {
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      .address {
+        line-height: 1.3;
+      }
+
+      ._stockItem {
+        display: flex;
+        align-items: center;
+
+        :not(:last-child) {
+          padding-bottom: 6px;
+        }
+
+        .createdAt {
+          color: ${props => props.theme.darkGreyColor};
+        }
+
+        ._stockItemCol {
+          :not(:last-child) {
+            padding-right: 3px;
+          }
+          ._stockItemRow {
+            display: flex;
+            flex-direction: column;
+            :not(:last-child) {
+              padding-bottom: 4px;
+            }
+          }
+        }
+      }
+
+      ._stockTime {
+        display: flex;
+        align-items: flex-start;
+      }
+
+      .statusBox {
+        display: flex;
+        padding: 3px;
+        border-radius: 4px;
+        margin-right: 4px;
+
+        .status {
+          color: white;
+        }
+      }
+      .plenty {
+        background-color: ${props => props.theme.greenColor};
+      }
+
+      .some {
+        background-color: ${props => props.theme.yellowColor};
+      }
+
+      .few {
+        background-color: ${props => props.theme.redColor};
+      }
+
+      .empty {
+        background-color: ${props => props.theme.greyColor};
       }
     }
 
+    .buttons {
+      padding-top: 4px;
+      display: grid;
+      grid-template-columns: 1fr;
+    }
+
     .linkBox {
-      width: 100%;
       display: flex;
       justify-content: center;
       padding: 4px;
-      border-radius: 4px;
       border: 1px solid ${props => props.theme.blueColor} !important;
+      border-radius: 4px;
+      :not(:last-child) {
+        border-right: 0px !important;
+      }
 
       a {
         display: block;
@@ -75,10 +143,6 @@ export const Container = styled.div`
       }
     }
 
-    .address {
-      line-height: 1.2;
-    }
-
     .distance {
       color: ${props => props.theme.darkGreyColor};
       padding-left: 4px;
@@ -87,33 +151,15 @@ export const Container = styled.div`
     ._stock span {
       white-space: normal;
       line-height: 1.2;
-      word-break: break-all;
-      :not(:last-child) {
-        padding-bottom: 4px;
-      }
+      /* word-break: break-all; */
+      padding: 2px 0px;
       text-align: center;
-    }
-
-    span.plenty {
-      color: ${props => props.theme.greenColor};
-    }
-
-    span.some {
-      color: ${props => props.theme.yellowColor};
-    }
-
-    span.few {
-      color: ${props => props.theme.redColor};
-    }
-
-    span.empty {
-      color: ${props => props.theme.greyColor};
     }
 
     :after {
       content: "";
       position: absolute;
-      margin-left: -12px;
+      transform: translateX(-50%);
       left: 50%;
       bottom: -10px;
       width: 22px;

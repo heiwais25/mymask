@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "../Styles/index";
 import KakaoMap from "../Components/KakaoMap/KakaoMap";
 import TopFilters from "../Components/TopFilters";
-import { IVisibleRemainStat } from "../hooks/useFetchStores";
+import { IVisibleRemainStat } from "../utils/stores";
 import LandingDialog from "../Components/LandingDialog";
 
 const Container = styled.div`

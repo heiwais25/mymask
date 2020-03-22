@@ -1,9 +1,9 @@
 import { useCallback, useState, useEffect } from "react";
-import { IStore, IVisibleRemainStat } from "./useFetchStores";
+import { IStore, IVisibleRemainStat } from "../utils/stores";
 import { IMarker, ICustomOverlay, ILatLng } from "../Components/KakaoMap/types";
 import { IMap, IMarkerClusterer } from "../Components/KakaoMap/types";
 import _ from "lodash";
-import { getEmptyMarkerSet, getMapMarkerOverlay } from "../Components/utils/maps";
+import { getEmptyMarkerSet, getMapMarkerOverlay } from "../utils/maps";
 import { values, keys } from "../utils/base";
 import { CLUSTER_MIN_LEVEL } from "../constants";
 

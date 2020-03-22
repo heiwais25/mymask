@@ -9,7 +9,7 @@ import Drawer from "./Drawer";
 const Container = styled.div`
   ${props => props.theme.topBox};
   color: white;
-  height: 55px;
+  height: ${props => props.theme.headerHeight};
   background-color: ${props => props.theme.primaryColor};
   justify-content: space-between;
   align-items: center;

@@ -202,7 +202,7 @@ export default ({
       </BottomSideButtons>
       {loading && (
         <LoaderBox>
-          <Loader size={40} />
+          <Loader size={28} />
         </LoaderBox>
       )}
     </>

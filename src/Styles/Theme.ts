@@ -9,7 +9,12 @@ const WHITE_BOX = `
   z-index: 1; 
 `;
 
+const HEADER_HEIGHT = "55px";
+const FILTER_BOX_HEIGHT = "44px";
+
 const theme = {
+  headerHeight: HEADER_HEIGHT,
+  filterBoxHeight: FILTER_BOX_HEIGHT,
   buttonBase: `
     cursor: pointer;
     -webkit-appearance: none;
@@ -48,12 +53,12 @@ const theme = {
   lightPrimaryColor: "#d8ebff",
 
   topBox: `
-  z-index: 5;
-  height: 44px;
-  background-color: #fff;
-  display: flex;
-  box-shadow: 0 3px 3px 0px rgba(0, 0, 0, 0.19);
-  padding: 0px 10px;  
+    z-index: 5;
+    height: ${FILTER_BOX_HEIGHT};
+    background-color: #fff;
+    display: flex;
+    box-shadow: 0 3px 3px 0px rgba(0, 0, 0, 0.19);
+    padding: 0px 10px;  
   `,
 
   unselectableText: `

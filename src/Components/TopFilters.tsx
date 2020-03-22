@@ -1,11 +1,12 @@
 import React from "react";
 import styled from "../Styles/index";
 import MarkerIconButton from "./MarkerIconButton";
-import { IVisibleRemainStat } from "../hooks/useFetchStores";
+import { IVisibleRemainStat } from "../utils/stores";
 import { statusString, statusColor } from "../constants";
 
 const Container = styled.div`
   ${props => props.theme.topBox};
+  height: ${props => props.theme.filterBoxHeight};
   display: flex;
   flex-direction: row;
   align-items: center;

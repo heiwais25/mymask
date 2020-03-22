@@ -7,15 +7,15 @@ import useKakaoMap from "../../hooks/useKakaoMap";
 import useKakaoMapBounds from "../../hooks/useKakaoMapPosition";
 import useFetchStores from "../../hooks/useFetchStores";
 import useKakaoMapMarker from "../../hooks/useKakaoMapMarker";
-import { IStore, IVisibleRemainStat } from "../../hooks/useFetchStores";
 import _ from "lodash";
 import StoreListDialog from "../StoreListDialog";
 import { useHistory } from "react-router-dom";
 import { useGeoLocation } from "../../hooks/useGeoLocation";
-import { isLatLngEqaul } from "../utils/maps";
+import { isLatLngEqaul } from "../../utils/maps";
 import SearchDialog from "../SearchDialog";
 import { Container } from "./KakaoMapContainer";
 import BookmarkDialog from "../BookmarkDialog";
+import { IVisibleRemainStat, IStore } from "../../utils/stores";
 
 declare global {
   interface Window {

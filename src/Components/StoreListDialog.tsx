@@ -8,10 +8,10 @@ import { FixedSizeList, ListChildComponentProps } from "react-window";
 import DialogContent from "./MuiDialogContent";
 import AutoSize from "react-virtualized-auto-sizer";
 import { useLocation, useHistory } from "react-router-dom";
-import { IStore, IRemainStat } from "../hooks/useFetchStores";
 import { STORE_LIST_DIALOG, statusString } from "../constants";
 import { Map } from "../Icons";
-import { getFormattedDistance } from "./utils/maps";
+import { getFormattedDistance } from "../utils/maps";
+import { IRemainStat, IStore } from "../utils/stores";
 
 const ListItemContainer = styled.div`
   padding: 8px 0px;

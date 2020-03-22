@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useHistory } from "react-router-dom";
 import { BOOKMARK_DIALOG } from "../../constants";
 import { ILatLng, IMap } from "../KakaoMap/types";
-import { convertCoord2AddressAPI } from "../utils/maps";
+import { convertCoord2AddressAPI } from "../../utils/maps";
 import { addBookmark, getBookmarks, removeBookmark } from "../../utils/bookmark";
 import { BookmarkData } from "../../utils/bookmark";
 import BookmarkDialogPresenter from "./BookmarkDialogPresenter";

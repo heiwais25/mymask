@@ -1,4 +1,4 @@
-import { IRemainStat, IVisibleRemainStat } from "./hooks/useFetchStores";
+import { IRemainStat, IVisibleRemainStat } from "./utils/stores";
 import moment from "moment";
 import { isMobile } from "react-device-detect";
 
@@ -15,8 +15,8 @@ export const BOOKMARK_KEY = "BOOKMARK_KEY";
 export const TIME_INTERVAL = 2; // in minute
 export const FETCH_DISTANCE = 2000; // in minute
 
-export const version = "v1.0.2";
-export const updateDate = moment("2020-03-20T11:00:00Z").toDate();
+export const version = process.env.REACT_APP_PUBLISH_VERSION || "v1.0.4";
+export const updateDate = moment(process.env.REACT_APP_PUBLISH_DATE).toDate() || moment().toDate();
 export const NOTICE_CHECK_TOKEN = `${version}/dialog-check`;
 export const NOTICE_CHECK_KEY = "dialog-check-key";
 

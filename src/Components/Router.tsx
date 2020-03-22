@@ -22,10 +22,15 @@ const PageBox = styled.div`
 
 const LoaderBox = styled.div`
   display: flex;
+  flex-direction: column;
   height: 100%;
   width: 100%;
   justify-content: center;
   align-items: center;
+`;
+
+const EmptyLoaderTopBox = styled.div`
+  height: calc(${props => props.theme.headerHeight} + ${props => props.theme.filterBoxHeight});
 `;
 
 const ErrorBox = styled.div`
@@ -72,7 +77,8 @@ export default () => {
     <Container>
       {!authorized && (
         <LoaderBox>
-          <Loader />
+          <EmptyLoaderTopBox />
+          <Loader size={28} />
         </LoaderBox>
       )}
       {authorized && (

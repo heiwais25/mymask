@@ -31,15 +31,19 @@ const BottomIcons = styled.div`
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 8px;
   font-size: 12px;
-  padding: 8px;
-  margin: 8px 0px;
+  padding: 0px 8px;
+  margin: 0px 0px;
+`;
+
+const BottomIconBox = styled.div`
+  margin: 16px 0px;
 `;
 
 const IconBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
 `;
 
 const Icon = styled.div`
@@ -167,37 +171,53 @@ export default function LandingDialog() {
         <Typography gutterBottom variant="body1" color="secondary">
           <RedText>업데이트</RedText>
         </Typography>
-        <Typography variant="body2">1. 새로 고침 버튼이 추가되었습니다.</Typography>
-        <Typography variant="body2">
-          2. 장소 저장 기능이 추가되었습니다. 자주 찾으시는 장소를 저장해놓으세요.
+        <Typography gutterBottom variant="body2">
+          1. 주중, 주말 각각에 대한 <RedText>최근 입고시간</RedText>과 평균적으로 입고부터 매진까지
+          걸리는 시간을 나타내는 <RedText>평균매진속도</RedText>가 추가되었습니다. 근처 약국을
+          클릭해서 언제 입고가 되는지 확인해보세요
         </Typography>
-        <Typography variant="body2">3. 어플리케이션이 제작되었습니다.</Typography>
         <Typography gutterBottom variant="body1" color="secondary">
           <RedText>유의사항</RedText>
         </Typography>
         <Typography variant="body2">1. 공적 마스크 정보는 5분 이상 지연된 정보입니다.</Typography>
-        <Typography gutterBottom variant="body2">
-          2. 마스크 재고는 다음 4개의 구간으로 나타납니다.
+        <Typography variant="body2">
+          2. 지연된 정보를 사용하기 때문에 최근 입고시간과 평균매진속도는 실제와 어느정도 차이가
+          있을 수 있습니다. 참고용으로만 사용해주시길 바랍니다.
         </Typography>
-        <BottomIcons>
-          <IconBox>
-            <GreyIcon />
-            <IconText>0 ~ 1개</IconText>
-            <IconText>판매중지</IconText>
-          </IconBox>
-          <IconBox>
-            <YellowIcon />
-            <IconText>2 ~ 29개</IconText>
-          </IconBox>
-          <IconBox>
-            <RedIcon />
-            <IconText>30 ~ 99개</IconText>
-          </IconBox>
-          <IconBox>
-            <GreenIcon />
-            <IconText>100개 이상</IconText>
-          </IconBox>
-        </BottomIcons>
+        <Typography gutterBottom variant="body2">
+          3. 마스크 재고는 다음 4개의 구간으로 나타납니다.
+        </Typography>
+        <BottomIconBox>
+          <BottomIcons>
+            <IconBox>
+              <GreyIcon />
+            </IconBox>
+            <IconBox>
+              <YellowIcon />
+            </IconBox>
+            <IconBox>
+              <RedIcon />
+            </IconBox>
+            <IconBox>
+              <GreenIcon />
+            </IconBox>
+          </BottomIcons>
+          <BottomIcons>
+            <IconBox>
+              <IconText>0 ~ 1개</IconText>
+              <IconText>판매중지</IconText>
+            </IconBox>
+            <IconBox>
+              <IconText>2 ~ 29개</IconText>
+            </IconBox>
+            <IconBox>
+              <IconText>30 ~ 99개</IconText>
+            </IconBox>
+            <IconBox>
+              <IconText>100개 이상</IconText>
+            </IconBox>
+          </BottomIcons>
+        </BottomIconBox>
         <Typography gutterBottom variant="body2">
           {moment(updateDate).format("LLLL")}
         </Typography>
