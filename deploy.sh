@@ -16,6 +16,6 @@ echo "Build mymask application version $REACT_APP_PUBLISH_VERSION"
 rm -rf build
 yarn build
 docker build -t $IMAGE_NAME .
-# docker push $IMAGE_NAME
+docker push $IMAGE_NAME
 
 
