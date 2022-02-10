@@ -22,7 +22,7 @@
     "immutable": "^4.0.0-rc.12",
     "lodash": "^4.17.15",
     "moment": "^2.24.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "query-string": "^6.11.1",
     "react": "^16.13.0",
     "react-app-polyfill": "^1.0.6",
